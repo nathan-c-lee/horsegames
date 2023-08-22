@@ -1,0 +1,118 @@
+#graphic {
+	visibility: hidden;
+}
+#reveal-box {
+	visibility: hidden;
+}
+#input-submit {
+	visibility: hidden;
+}
+
+#letter-status {
+	position: fixed;
+	top: 10px;
+	border: solid black 2px;
+	height: 120px;
+	width: 250px;
+	
+}
+
+#hangman {
+	position: fixed;
+	left: 300px;
+}
+
+#gallows {
+	border-top: solid black 5px;
+	border-right: solid black 5px;
+	position: fixed;
+	height: 180px;
+	width: 80px;	
+}
+
+#noose {
+	position: fixed;
+	background-color: black;
+	width: 5px;
+	height: 20px;
+	top: 16px;
+}
+
+#man-head {
+	position: fixed;
+	width: 25px;
+	height: 25px;
+	border: solid black 2px;
+	border-radius: 100%;
+	top: 35px;
+	left: 289px;
+	visibility: hidden;
+	
+}
+
+#man-body {
+	position: fixed;
+	width: 3px;
+	height: 50px;
+	background-color: black;
+	top: 63px;
+	left: 302px;
+	visibility: hidden;
+}
+#arm-left {
+	position: fixed;
+	width: 2px;
+	height: 25px;
+	background-color: black;
+	top: 66px;
+	left: 298px;
+	transform: rotate(20deg);
+	visibility: hidden;
+}
+
+#arm-right {
+	position: fixed;
+	width: 2px;
+	height: 25px;
+	background-color: black;
+	top: 66px;
+	left: 307px;
+	transform: rotate(-20deg);
+	visibility: hidden;
+}
+#leg-left {
+	position: fixed;
+	width: 2px;
+	height: 35px;
+	background-color: black;
+	top: 107px;
+	left: 298px;
+	transform: rotate(15deg);
+	visibility: hidden;
+}
+#leg-right {
+	position: fixed;
+	width: 2px;
+	height: 35px;
+	background-color: black;
+	top: 107px;
+	left: 307px;
+	transform: rotate(-15deg);
+	visibility: hidden;
+}
+
+#reveal-row {
+	position: fixed;
+	top: 150px;
+}
+#input {
+	position: fixed;
+	top: 250px;
+}
+#submit {
+	position: fixed;
+	top: 250px;
+	left: 200px;
+}
+
+

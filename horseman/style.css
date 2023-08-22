@@ -1,0 +1,19 @@
+#nav-compass {
+	display: inline-block;
+}
+#text-window {
+	margin: auto;
+	width: 80%;
+	height: 400px;
+	border: solid black 2px;
+	overflow-y: scroll;
+}
+
+#input-window{
+	margin: auto;
+	width: 80%;
+}
+
+#input {
+	width: 98%;
+}

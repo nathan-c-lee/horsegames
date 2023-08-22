@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hangman</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+	<div id="word-choose">
+		<input id="new-word"></input>
+		<button id="new-word-submit">submit</button>
+	</div>
+
+	<table id="graphic">
+		<tr id="top-bar">
+			<td>
+				<div id="letter-status"></div>
+			</td>
+			<td id="hangman">
+				<div id="gallows"></div>
+				<div id="noose"></div>
+				<div id="man-head"></div>
+				<div id="man-body"></div>
+				<div id="arm-left"></div>
+				<div id="arm-right"></div>
+				<div id="leg-left"></div>
+				<div id="leg-right"></div>	
+			</td>
+		</tr>	
+	</table>
+
+	<table id="reveal-box">
+		<tr id="reveal-row"></tr>
+	</table>
+	<div id="input-submit">	
+		<input id="input"></input>
+		<button id="submit">check</button>
+	</div>
+
+	<script src="script.js" type="text/javascript"></script>
+  </body>
+</html>
