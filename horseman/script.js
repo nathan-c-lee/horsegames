@@ -1,3 +1,21 @@
+/*
+This game was written for entertainment and educational purposes only.
+The geographic location described and replicated in the gameplay of this script is a real
+place, and some of the carachters are inspired by real people who might be found at that
+location. To protect their identity and anonynomity, the true names of these people and
+places have been changed to a reasonable degree. Beyond the generalized description of the
+location, and the most basic caracature of a handful of the game's carachters, the antics
+and representation of any of the game carachters or locations is a work of pure fiction, 
+is outlandish, absurd, and befitting of an 80's inspired text-based adventure game 
+centered around a main playable carachter who is a horseman. (I picture this as a human
+with the head of a horse and hooves at the end of his arms and legs, but the details 
+of Wild Mr. Horseman's appearance are left to the imagination of the player.) The 
+long-and-short of it being: All of this game and its similarity to anyone or anything in
+reality is either coincidental, or done in jest and in good sport. I hope it is enjoyed
+by all who play it.
+*/
+
+
 const text_window = document.getElementById("text-window");
 const input = document.getElementById("input");
 const submit = document.getElementById("submit");
@@ -6,9 +24,9 @@ let move_count = 0;
 
 class beachfront {
 	constructor(iter) {
-		this.description = () => {return "You're on the white sandy beach of Amelia Island, continuing to the north and south for miles."};
+		this.description = () => {return "You're on the white sandy beach of Horsey Island, continuing to the north and south for miles."};
 		if (iter === 0) {
-			this.description = () => {return "You're on the white sandy beach of Amelia Island, extending to the north for miles. An outcropping of rocks and debris blocks your passage to the south."},
+			this.description = () => {return "You're on the white sandy beach of Horsey Island, extending to the north for miles. An outcropping of rocks and debris blocks your passage to the south."},
 			this.commands = {
 				"go north": () => {player.location = beachfronts[iter + 1]; return player.location.description()},
 				n: () => {return this.commands["go north"]()},
@@ -30,7 +48,7 @@ class beachfront {
 				s: () => {return this.commands["go south"]()}
 			}
 		} else if (iter === 13) {
-			this.description = () => {return "You're on the white sandy beach of Amelia Island, extending to the south for miles. An outcropping of rocks and debris blocks your passage to the north."},
+			this.description = () => {return "You're on the white sandy beach of Horsey Island, extending to the south for miles. An outcropping of rocks and debris blocks your passage to the north."},
 			this.commands = {
 				"go north": () => {return "You can't go that way. An outcropping of rock and debris blocks your path."},
 				n: () => {return this.commands["go north"]()},
@@ -710,7 +728,7 @@ const world = {
 	},
 
 	east_pool: {
-		description: () => {return "You are on the east quadrant of the pool deck. To your west the family pool and splash pad are bustling with excitement. To the east, a fence seperates the pool deck from the white sandy beach of Amelia Island, where the calm waves of the Atlantic ocean are soothingly crashing against the shore. The pool deck continues around the pools to the north and south."},
+		description: () => {return "You are on the east quadrant of the pool deck. To your west the family pool and splash pad are bustling with excitement. To the east, a fence seperates the pool deck from the white sandy beach of Horsey Island, where the calm waves of the Atlantic ocean are soothingly crashing against the shore. The pool deck continues around the pools to the north and south."},
 		commands: {
 			"go north": () => {player.location = world.north_pool; return player.location.description()},
 			"go south": () => {player.location = world.south_pool; return player.location.description()},
@@ -766,7 +784,7 @@ const world = {
 	},
 
 	hotel_north_bch: {
-		description: () => {return "You are on a section of white, sandy beach, in front of the northern half of the Omni Resort on Amelia Island. The beach extends for miles to the north and south, and a gate to your west leads to the pool deck outside the resort. To the east, the waves of the calm yet mighty Atlantic roll gently against the shore."},
+		description: () => {return "You are on a section of white, sandy beach, in front of the northern half of the Luxe Resort on Horsey Island. The beach extends for miles to the north and south, and a gate to your west leads to the pool deck outside the resort. To the east, the waves of the calm yet mighty Atlantic roll gently against the shore."},
 		commands: {
 			"go north": () => {player.location = beachfronts[5]; return player.location.description()},
 			"go south": () => {player.location = world.hotel_south_bch; return player.location.description()},
@@ -790,7 +808,7 @@ const world = {
 	},
 
 	hotel_south_bch: {
-		description: () => {return "You are on a section of white, sandy beach, in front of the southern half of the Omni Resort on Amelia Island. The beach extends for miles to the north and south."},
+		description: () => {return "You are on a section of white, sandy beach, in front of the southern half of the Luxe Resort on Horsey Island. The beach extends for miles to the north and south."},
 		commands: {
 			"go north": () => {player.location = world.hotel_north_bch; return player.location.description()},
 			n: () => {return world.hotel_south_bch.commands["go north"]()},
@@ -936,7 +954,7 @@ const world = {
 		}
 	},
 	front_entrance: {
-		description: () => {return "You are at the front entrance of the Omni Amelia Island Resort. Several bellmen and valets are present, some assisting hotel guests with luggage or their vehicles, others waiting attentively for any opportunity to assist. In particular, a friendly looking man, who's nametag reads 'Scott', is smiling and greeting people enthusiastically as he opens the front door to the lobby for the many people going in and out. You may enter the lobby to the east through Scott's door, or travel along the hotel's outdoor hallway to the north, or enter the breezeway to your south. You may also take the steps to your west down onto the front drive, where several cars are waiting under the porte-cochère."},
+		description: () => {return "You are at the front entrance of the Luxe Horsey Island Resort. Several bellmen and valets are present, some assisting hotel guests with luggage or their vehicles, others waiting attentively for any opportunity to assist. In particular, a friendly looking man, who's nametag reads 'Raymond DeScott', is smiling and greeting people enthusiastically as he opens the front door to the lobby for the many people going in and out. You may enter the lobby to the east through Raymond's door, or travel along the hotel's outdoor hallway to the north, or enter the breezeway to your south. You may also take the steps to your west down onto the front drive, where several cars are waiting under the porte-cochère."},
 		commands: {
 			"go east": () => {player.location = world.hotel_lobby; return player.location.description()},
 			e: () => {return world.front_entrance.commands["go east"]()},
@@ -944,7 +962,7 @@ const world = {
 			w: () => {return world.front_entrance.commands["go west"]()},
 			"go south": () => {player.location = world.breezeway_north; return player.location.description()},
 			s: () => {return world.front_entrance.commands["go south"]()},
-			"tackle scott and do the thing": () => {return "You abruptly tackle Scott, the friendly bellman, to the ground and violently penetrate his BH with your hoof-hand. Everyone around you stops and watches the commotion in shock. After a few minutes of deep pleasure, you remove your hoof from Scott's bloodied, gaping poo-chute and step away. Scott breathes in deeply before standing, pulling his trousers back up, and saying 'Wow, thanks so much, I really needed that release.' Everyone applauds the show as you wipe the fluids from your hoof and forearm, and then it's back to business as usual."}
+			"tackle raymond and do the thing": () => {return "You abruptly tackle Raymond, the friendly bellman, to the ground and wrestle around with him there for a moment. A small group of people stop to watch as the commotion ensues, and invariably Raymond becomes romantically incensed by the horseplay, due to the instinctive nature of his species when it comes to wrastlin' an'a horseplayin' for an audience. After a few moments, a small crowd had gathered, but just as soon as it seemed to be becoming a spectator worthy scuffle, the tone of the encounter shifted and the veracity of the horseplay dampened to a soft lover's quarrel. The scene quickly becomes too tender for the public surroundings, and so the two of you disappear to a nearby storage closet, affectionately refferred to as 'The Deep' by it's keepers, and Mr. DeScott and Wild Mr. Horseman would remain uninterrupted behind its door for nearly 37 minutes. Upon leaving The Deep, Raymond and you return to the front entrance, where the crowd has dispersed and business carries on as usual."}
 		},
 		npc_options: {
 			move: {
@@ -964,7 +982,7 @@ const world = {
 		}
 	},
 	front_drive: {
-		description: () => {return "You are on the front driveway of the Omni Hotel, under the porte-cochère. There are vehicles coming and going, and valet attendents running around hurriedly, and bellmen bringing and taking cartfuls of luggage to and from the numerous cars on the drive way. You may go up the steps leading to the front entrance to the east, or you may go to the tram stop to your west."},
+		description: () => {return "You are on the front driveway of the Luxe Hotel, under the porte-cochère. There are vehicles coming and going, and valet attendents running around hurriedly, and bellmen bringing and taking cartfuls of luggage to and from the numerous cars on the drive way. You may go up the steps leading to the front entrance to the east, or you may go to the tram stop to your west."},
 		commands: {
 			"go east": () => {player.location = world.front_entrance; return player.location.description()},
 			e: () => {return world.front_drive.commands["go east"]()},
@@ -1229,36 +1247,36 @@ const world = {
 		}
 	},
 
-	vernons_office: {
+	miltons_office: {
 		bound: true,
 		seated: true,
 		locked: true,
 		turns_in_office: 0,
-		description: () => {return "You come to under the greenish white glow of an office flourescent tube. Your hooves are bound with zip ties behind the office chair that you're seated in. You're alone, but you hear voices outside the door. There's a computer with a blank screen on the desk, a card reader, a coffee mug full of pens and pencils, scissors, tape and other office supplies. As you await your fate, you notice the zip tie around your hooves is loose around your wrists. You quickly grab the scissors off the desk, and then hide your hands back behind the chair. No sooner do you have your weapon concealed than the door bursts open, Vernon storms in with a clipboard and anger in his eyes. 'Right then mate, what we gonna do 'bout this then?' he mutters as he leans in toward you."},
+		description: () => {return "You come to under the greenish white glow of an office flourescent tube. Your hooves are bound with zip ties behind the office chair that you're seated in. You're alone, but you hear voices outside the door. There's a computer with a blank screen on the desk, a card reader, a coffee mug full of pens and pencils, scissors, tape and other office supplies. As you await your fate, you notice the zip tie around your hooves is loose around your wrists. You quickly grab the scissors off the desk, and then hide your hands back behind the chair. No sooner do you have your weapon concealed than the door bursts open, Milton storms in with a clipboard and anger in his eyes. 'Right then mate, what we gonna do 'bout this then?' he mutters as he leans in toward you."},
 		items: {
 			"pair of scissors": {
 				description: "a sharp pair of office scissors",
 				commands: {
-					"stab vernon with scissors": () => {
+					"stab milton with scissors": () => {
 						player.inventory["master key"] = mobile_npc.prince.inventory["master key"];
 						delete mobile_npc.prince.inventory["master key"];
-						return "As he leans in, you swiftly and callously swing the point of the scissors up from behind your back and forcefully drive them into his ear, through his skull, and into his soft brain. He lets out a loud scream which quickly becomes a gurgle, his eyes roll in the back of his head as blood pours out of his ear, and his convulsing body falls to the floor. After a moment the noises and movement stop, and you remove the white key card from the side of Vernon's lifeless body. You sigh softly as the weight of taking a man's life crashes down upon you, a single pearly tear rolls out of the corner of your eye and down your cheek. You mourn the violence this world demands for a moment longer, then sniffle lightly as you wipe the sorrow from your face, refocusing on your mission."
+						return "As he leans in, you swiftly and callously swing the point of the scissors up from behind your back and forcefully drive them into his ear, through his skull, and into his soft brain. He lets out a loud scream which quickly becomes a gurgle, his eyes roll in the back of his head as blood pours out of his ear, and his convulsing body falls to the floor. After a moment the noises and movement stop, and you remove the white key card from the side of Milton's lifeless body. You sigh softly as the weight of taking a man's life crashes down upon you, a single pearly tear rolls out of the corner of your eye and down your cheek. You mourn the violence this world demands for a moment longer, then sniffle lightly as you wipe the sorrow from your face, refocusing on your mission."
 					},
 				}
 			}
 		},
 		commands: {
 			/*"escape from zipties": () => {
-				world.vernons_office.turns_in_office += 1;
-				if (world.vernons_office.bound) {
-					world.vernons_office.bound = false;
-					return "With a little effort, you're able to slip your hooves out of the zipties. You remain seated with your hooves behind your back, but you are free. You hear voices and footsteps approaching outside the office door. They stop for a moment outside and you hear Vernon's voice coming from beyond the door, 'He's just inside here. Strangest thing I've ever seen - he's a man, but he's also a horse. Right assaulted me too, he did.' They continue past the door and the footsteps fade to silence.";
+				world.miltons_office.turns_in_office += 1;
+				if (world.miltons_office.bound) {
+					world.miltons_office.bound = false;
+					return "With a little effort, you're able to slip your hooves out of the zipties. You remain seated with your hooves behind your back, but you are free. You hear voices and footsteps approaching outside the office door. They stop for a moment outside and you hear Milton's voice coming from beyond the door, 'He's just inside here. Strangest thing I've ever seen - he's a man, but he's also a horse. Right assaulted me too, he did.' They continue past the door and the footsteps fade to silence.";
 				} else {
 					return "Your hooves are already unbound.";
 				}
 			},*/
 			"get scissors": () => {
-				world.vernons_office.turns_in_office += 1;
+				world.miltons_office.turns_in_office += 1;
 				get_item("pair of scissors");
 			},
 			"exit office": () => {
@@ -1306,7 +1324,7 @@ const world = {
 };
 
 const mobile_npc = {
-	"THE Mitch Bratton": {
+	"THE Mitchall LeBratten": {
 		move_on: 2,
 		location: world.front_entrance,
 		add_desc: () => {return "A grizzled old man is standing here. He is wearing a Hotel uniform, the waist of his short pants hanging awkwardly cock-eyed off of one hip, a walkie-talkie on his belt pulling down the other end of his waistline almost to the top of his thigh. A pair of thin wire frame glasses are held tightly against his face with rubber bands around the back of his head. A wide grin akin to the 'The Joker' rests frighteningly on his face. Around his neck, he wears a necklace with several human ears and dog tags strung on it. You see his name tag reads 'Mitch' as he approaches you, dropping several 'Halls' menthol throat lozenge wrappers behind him as he walks. 'Hey there Buddy, I'm the Awesome Guy! I served in Vietnam, you know 'Lone Survivor' stuff, that's where I got these!' He lifts his grotesque ear-necklace for emphasis. 'Then I was a lineman for AT&T for 30 years, did lots of cable repair work after the hurricanes, you know? Anyway I took a full pension buy out a few years back, now im just livin the dream! Another day in Paradise!' he then turns to wish a confused man and his son 'Happy Mother's Day' before walking back to his post near the door, dropping a few more 'Halls' wrappers on the way."},
@@ -1350,24 +1368,24 @@ const mobile_npc = {
 			if (mobile_npc.prince.inventory["master key"]){
 				master = " A white key card hangs off of his hip on a caribeaner attatched to his beltloop."
 			}
-			return `Vernon, better known as 'Prince' the hotel security man, is here. He glances at you, smiles and says 'Why the long face, mate?' in his signiture british accent.${master}`;
+			return `Milton, better known as 'Prince' the hotel security man, is here. He glances at you, smiles and says 'Why the long face, mate?' in his signiture british accent.${master}`;
 		},
 		
 		npc_commands: {
-			"fight vernon for key": () => {
+			"fight milton for key": () => {
 				let roll = Math.floor(Math.random() * 4) + 1;
 				if (roll > 3) {
 					player.inventory["master key"] = mobile_npc.prince.inventory["master key"];
 					delete mobile_npc.prince.inventory["master key"];
-					return "Suddenly and without warning, you lunge at Vernon from a horses arm length, blindsiding the unsuspecting security man right in the jaw with your hardened hoof. Incredibly, this does not knock him unconscious, though blood immediately begins pouring from his mouth and nose. 'Bloody F--kin Hell mate!' he spits as he squares up to you. The two of you spar for several minutes, each landing a number of solid blows. Vernon fights galliantly, but alas, the initial sucker-punch seems to have set the tone of the fight and after landing another hoof in Vernon's swelling and bloodied face, he falls unconscious to the ground. You bend down and remove the key card from his hip, and let out low 'neigh' as you observe the bloodied prize held by your hoof. You look down at Vernon's defeated body, and for a brief moment you are filled with compassion and remorse, your soul bitterly lamenting the violence this world demands. The feeling passes as quickly as it came, and your mind returns to your mission." 
+					return "Suddenly and without warning, you lunge at Milton from a horses arm length, blindsiding the unsuspecting security man right in the jaw with your hardened hoof. Incredibly, this does not knock him unconscious, though blood immediately begins pouring from his mouth and nose. 'Bloody F--kin Hell mate!' he spits as he squares up to you. The two of you spar for several minutes, each landing a number of solid blows. Milton fights galliantly, but alas, the initial sucker-punch seems to have set the tone of the fight and after landing another hoof in Milton's swelling and bloodied face, he falls unconscious to the ground. You bend down and remove the key card from his hip, and let out low 'neigh' as you observe the bloodied prize held by your hoof. You look down at Milton's defeated body, and for a brief moment you are filled with compassion and remorse, your soul bitterly lamenting the violence this world demands. The feeling passes as quickly as it came, and your mind returns to your mission." 
 				} else {
-					player.location = world.vernons_office;
+					player.location = world.miltons_office;
 					
-					return `Suddenly and without warning, you lunge at Vernon from a horses arm length, throwing a solid right cross towards his jaw. Vernon however, is faster than you estimated and manages to dodge your attack. 'Aye, what the hell mate? That's really unacceptable mate, you're definitely gettin documented for that one!' He exclaims as he squares up to you. After a few minutes of active sparring, Vernon lands a heavy blow right between your beady horse eyes, and its lights out.<br><br>${world.vernons_office.description()}`
+					return `Suddenly and without warning, you lunge at Milton from a horses arm length, throwing a solid right cross towards his jaw. Milton however, is faster than you estimated and manages to dodge your attack. 'Aye, what the hell mate? That's really unacceptable mate, you're definitely gettin documented for that one!' He exclaims as he squares up to you. After a few minutes of active sparring, Milton lands a heavy blow right between your beady horse eyes, and its lights out.<br><br>${world.miltons_office.description()}`
 				}
 				
 			},
-			"fight prince for key": () => {return mobile_npc.prince.npc_commands["fight vernon for key()"]}
+			"fight prince for key": () => {return mobile_npc.prince.npc_commands["fight Milton for key()"]}
 		}
 	}
 };
