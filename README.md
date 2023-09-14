@@ -1,5 +1,5 @@
 # horsegames
-These are some games javascript games I made for 
+These are some javascript games I made for 
 your browser.
 
 horseman is a text based adventure game
