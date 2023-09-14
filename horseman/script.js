@@ -21,7 +21,7 @@ const submit = document.getElementById("submit");
 
 let move_count = 0;
 
-import {beachfronts, floors, elevators, world, mobile_npc} from "world.js";
+import {beachfronts, floors, elevators, world, mobile_npc} from "./world.js"
 
 const initial_p =  document.createElement("p");
 let npc_present = "";
