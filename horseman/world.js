@@ -220,7 +220,7 @@ class hotel_floor {
 		
 		this.rooms = [];
 
-		for (i = 1; i < 72; i++) {
+		for (let i = 1; i < 72; i++) {
 			if (i === 13 || i === 66) {
 				continue;
 			}
@@ -586,13 +586,13 @@ class hotel_floor {
 
 let beachfronts = [];
 
-for (i = 0; i < 14; i++) {
+for (let i = 0; i < 14; i++) {
 	beachfronts[i] = new beachfront(i);
 };
 
 let floors = [];
 
-for (j = 2; j < 9; j++) {
+for (let j = 2; j < 9; j++) {
 	floors[j] = new hotel_floor(String(j));
 }
 
@@ -1449,4 +1449,4 @@ const player = {
 	}
 };
 
-export {beachfronts, floors, elevators, world, mobile_npc};
+export {beachfronts, floors, elevators, world, mobile_npc, player};

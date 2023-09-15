@@ -21,11 +21,11 @@ const submit = document.getElementById("submit");
 
 let move_count = 0;
 
-import {beachfronts, floors, elevators, world, mobile_npc} from "./world.js"
+import {beachfronts, floors, elevators, world, mobile_npc, player} from "./world.js";
 
 const initial_p =  document.createElement("p");
 let npc_present = "";
-for (npc in mobile_npc) {
+for (let npc in mobile_npc) {
 	if (mobile_npc[npc].location == player.location) {
 		npc_present = npc_present.concat(mobile_npc[npc].add_desc() + '<br><br>');
 	}
