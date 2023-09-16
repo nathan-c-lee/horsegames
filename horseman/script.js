@@ -54,7 +54,7 @@ function process_input(in_val) {
 	
 	for (let i in player.inventory) {
 		const item = player.inventory[i];
-		for (command in item.commands) {
+		for (let command in item.commands) {
 			if (command === in_val) {
 				move_count += 1;
 				terminal_output.innerHTML = move_mobile_npcs(item.commands[in_val]());

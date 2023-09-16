@@ -1310,18 +1310,6 @@ const mobile_npc = {
 		location: world.west_pool,
 		add_desc: () => {return "test npc3 is here"},
 		inventory: {}
-	},
-	"npc2": {
-		move_on: 1,
-		location: world.west_pool,
-		add_desc: () => {return "test npc2 is here"},
-		inventory: {}
-	},
-	"npc1": {
-		move_on: 1,
-		location: world.west_pool,
-		add_desc: () => {return "test npc1 is here"},
-		inventory: {}
 	},*/
 	"old crazy": {
 		move_on: 3,
@@ -1355,12 +1343,13 @@ const mobile_npc = {
 					return "Suddenly and without warning, you lunge at Milton from a horses arm length, blindsiding the unsuspecting security man right in the jaw with your hardened hoof. Incredibly, this does not knock him unconscious, though blood immediately begins pouring from his mouth and nose. 'Bloody F--kin Hell mate!' he spits as he squares up to you. The two of you spar for several minutes, each landing a number of solid blows. Milton fights galliantly, but alas, the initial sucker-punch seems to have set the tone of the fight and after landing another hoof in Milton's swelling and bloodied face, he falls unconscious to the ground. You bend down and remove the key card from his hip, and let out low 'neigh' as you observe the bloodied prize held by your hoof. You look down at Milton's defeated body, and for a brief moment you are filled with compassion and remorse, your soul bitterly lamenting the violence this world demands. The feeling passes as quickly as it came, and your mind returns to your mission." 
 				} else {
 					player.location = world.miltons_office;
-					
 					return `Suddenly and without warning, you lunge at Milton from a horses arm length, throwing a solid right cross towards his jaw. Milton however, is faster than you estimated and manages to dodge your attack. 'Aye, what the hell mate? That's really unacceptable mate, you're definitely gettin documented for that one!' He exclaims as he squares up to you. After a few minutes of active sparring, Milton lands a heavy blow right between your beady horse eyes, and its lights out.<br><br>${world.miltons_office.description()}`
 				}
 				
 			},
-			"fight prince for key": () => {return mobile_npc.prince.npc_commands["fight Milton for key()"]}
+			"fight prince for key": () => {return mobile_npc.prince.npc_commands["fight milton for key"]()},
+			"fight milton": () => {return mobile_npc.prince.npc_commands["fight milton for key"]()},
+			"fight prince": () => {return mobile_npc.prince.npc_commands["fight milton for key"]()}
 		}
 	}
 };
@@ -1381,7 +1370,7 @@ const player = {
 	commands: {
 		inventory: () => {
 			let contents = "INVENTORY:";
-			for (i in player.inventory) {
+			for (let i in player.inventory) {
 				contents = contents + "<br>-- " + i + ": " + player.inventory[i].description; 
 			}
 			return contents + "<br>";
@@ -1392,7 +1381,7 @@ const player = {
 		lc: () => {
 			let cmds_txt = "";
 			let header_txt = "Location Commands:"
-			for (cmd in player.location.commands) {
+			for (let cmd in player.location.commands) {
 				cmds_txt = cmds_txt + "<br>-- " + cmd;
 			}
 
@@ -1401,9 +1390,9 @@ const player = {
 		ic: () => {
 			let cmds_txt = "";
 			let header_txt = "Inventory Commands:"
-			for (item in player.inventory) {
+			for (let item in player.inventory) {
 				cmds_txt = cmds_txt + "<br>* " + item;
-				for (i_cmd in player.inventory[item].commands) {
+				for (let i_cmd in player.inventory[item].commands) {
 					cmds_txt = cmds_txt + "<br>-- " + i_cmd;
 				}
 			}
@@ -1413,10 +1402,10 @@ const player = {
 		chc: () => {
 			let cmds_txt = "";
 			let header_txt = "Carachter Commands:"
-			for (npc in mobile_npc) {
+			for (let npc in mobile_npc) {
 				console.log(mobile_npc[npc].location, player.location)
 				if (mobile_npc[npc].location == player.location) {
-					for (cmd in mobile_npc[npc].npc_commands) {
+					for (let cmd in mobile_npc[npc].npc_commands) {
 						cmds_txt = cmds_txt + "<br>-- " + cmd;
 					};
 				}
@@ -1429,7 +1418,7 @@ const player = {
 		"show all commands": () => {
 			let cmds_txt = "AVAILABLE COMMANDS:"
 			cmds_txt = cmds_txt + "<br> Player Commands:"
-			for (cmd in player.commands) {	
+			for (let cmd in player.commands) {	
 				cmds_txt = cmds_txt + "<br>-- " + cmd;
 			}
 
@@ -1441,7 +1430,7 @@ const player = {
 		ac: () => {return player.commands["show all commands"]()},
 		////debugs only!!! vvv
 		"show npcs": () => {
-			for (i in mobile_npc){
+			for (let i in mobile_npc){
 				console.log(`${i}: `, mobile_npc[i].location.description());
 			}
 			return "this is a debug command. it is not part of the game.";
@@ -1449,4 +1438,4 @@ const player = {
 	}
 };
 
-export {beachfronts, floors, elevators, world, mobile_npc, player};
+export {mobile_npc, player};
