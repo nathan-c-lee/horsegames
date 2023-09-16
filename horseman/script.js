@@ -21,7 +21,7 @@ const submit = document.getElementById("submit");
 
 let move_count = 0;
 
-import {beachfronts, floors, elevators, world, mobile_npc, player} from "./world.js";
+import {mobile_npc, player} from "./world.js";
 
 const initial_p =  document.createElement("p");
 let npc_present = "";
@@ -36,7 +36,7 @@ text_window.append(initial_p);
 function process_input(in_val) {
 	const terminal_output = document.createElement("p");
 
-	for (command in player.commands) {
+	for (let command in player.commands) {
 		if (command === in_val) {
 			move_count += 1;
 			terminal_output.innerHTML = move_mobile_npcs(player.commands[in_val]());
@@ -44,7 +44,7 @@ function process_input(in_val) {
 		}
 	};
 
-	for (command in player.location.commands) {
+	for (let command in player.location.commands) {
 		if (command === in_val) {
 			move_count += 1;
 			terminal_output.innerHTML = move_mobile_npcs(player.location.commands[in_val]());
@@ -52,7 +52,7 @@ function process_input(in_val) {
 		}
 	};
 	
-	for (i in player.inventory) {
+	for (let i in player.inventory) {
 		const item = player.inventory[i];
 		for (command in item.commands) {
 			if (command === in_val) {
@@ -65,11 +65,11 @@ function process_input(in_val) {
 
 	// npc interactions
 	let interact_var = 0;
-	for (npc in mobile_npc) { 
+	for (let npc in mobile_npc) { 
 		//console.log(interact_var, npc, player.location, mobile_npc[npc].location);
 		interact_var ++;
 		if (player.location == mobile_npc[npc].location) {
-			for (command in mobile_npc[npc].npc_commands) {
+			for (let command in mobile_npc[npc].npc_commands) {
 				console.log(command);
 				if (in_val == command) {
 					move_count += 1;
@@ -98,7 +98,7 @@ function get_item(item_name) {
 
 
 function move_mobile_npcs(command_output, skip) {
-	for (npc in mobile_npc) {
+	for (let npc in mobile_npc) {
 		if (npc == skip) {
 			console.log(npc)
 			continue;
@@ -109,7 +109,7 @@ function move_mobile_npcs(command_output, skip) {
 			
 			const rand_index = Math.floor(Math.random() * Object.keys(available_moves).length);
 			
-			for (move in available_moves) {
+			for (let move in available_moves) {
 				if (rand_index === available_moves[move].index) {
 					mobile_npc[npc].location = available_moves[move].f();
 				} 
@@ -117,7 +117,7 @@ function move_mobile_npcs(command_output, skip) {
 		}
 	}
 
-	for (npc in mobile_npc){
+	for (let npc in mobile_npc){
 		if (player.location === mobile_npc[npc].location  && npc != skip) {
 			const npc_text = mobile_npc[npc].add_desc();
 			return command_output + "<br>" + npc_text;
