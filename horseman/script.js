@@ -86,15 +86,6 @@ function process_input(in_val) {
 	return terminal_output;
 };
 
-function get_item(item_name) {
-	const item = player.location.items[item_name];
-	if (item === undefined) {
-		return `there isnt a ${item_name} here`;
-	}
-	player.inventory[item_name] = item;
-	delete player.location.items[item_name];
-	return `you got the ${item_name}. it is now in your inventory.`;
-};
 
 
 function move_mobile_npcs(command_output, skip) {

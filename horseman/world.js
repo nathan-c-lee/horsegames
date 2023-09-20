@@ -603,6 +603,16 @@ const elevators = {
 	elev_64: new elevator(64)
 };
 
+function get_item(item_name) {
+	const item = player.location.items[item_name];
+	if (item === undefined) {
+		return `there isnt a ${item_name} here`;
+	}
+	player.inventory[item_name] = item;
+	delete player.location.items[item_name];
+	return `you got the ${item_name}. it is now in your inventory.`;
+};
+
 const world = {
 	north_pool: {
 		description: () => {
@@ -1224,19 +1234,34 @@ const world = {
 
 	miltons_office: {
 		bound: true,
-		seated: true,
 		locked: true,
 		turns_in_office: 0,
+		can_escape: () => {
+			if (player.location.bound == true) {
+				return "you cant do that, you're bound"
+			}
+			if (player.location.locked == true) {
+				return "you cant get out, the door is locked."
+			}
+		},
 		description: () => {return "You come to under the greenish white glow of an office flourescent tube. Your hooves are bound with zip ties behind the office chair that you're seated in. You're alone, but you hear voices outside the door. There's a computer with a blank screen on the desk, a card reader, a coffee mug full of pens and pencils, scissors, tape and other office supplies. As you await your fate, you notice the zip tie around your hooves is loose around your wrists. You quickly grab the scissors off the desk, and then hide your hands back behind the chair. No sooner do you have your weapon concealed than the door bursts open, Milton storms in with a clipboard and anger in his eyes. 'Right then mate, what we gonna do 'bout this then?' he mutters as he leans in toward you."},
 		items: {
 			"pair of scissors": {
 				description: "a sharp pair of office scissors",
 				commands: {
 					"stab milton with scissors": () => {
+						if (player.location.bound == true) {
+							return "you're bound"
+						}
+						return "you are here"
+
 						player.inventory["master key"] = mobile_npc.prince.inventory["master key"];
 						delete mobile_npc.prince.inventory["master key"];
 						return "As he leans in, you swiftly and callously swing the point of the scissors up from behind your back and forcefully drive them into his ear, through his skull, and into his soft brain. He lets out a loud scream which quickly becomes a gurgle, his eyes roll in the back of his head as blood pours out of his ear, and his convulsing body falls to the floor. After a moment the noises and movement stop, and you remove the white key card from the side of Milton's lifeless body. You sigh softly as the weight of taking a man's life crashes down upon you, a single pearly tear rolls out of the corner of your eye and down your cheek. You mourn the violence this world demands for a moment longer, then sniffle lightly as you wipe the sorrow from your face, refocusing on your mission."
 					},
+					"stab milton": () => {
+						return player.inventory["pair of scissors"].commands["stab milton with scissors"]();
+					}
 				}
 			}
 		},
@@ -1252,10 +1277,15 @@ const world = {
 			},*/
 			"get scissors": () => {
 				world.miltons_office.turns_in_office += 1;
-				get_item("pair of scissors");
+				if (player.location.bound == true) {
+					return "you're bound"
+				}
+				return get_item("pair of scissors");
 			},
 			"exit office": () => {
-				
+				if (player.location.bound == true) {
+					return "you're bound"
+				}
 				player.location.seated = false;
 				
 			}
@@ -1356,7 +1386,7 @@ const mobile_npc = {
 
 const player = {
 	//START LOCATION
-	location: world.breezeway_north,
+	location: world.miltons_office,
 	inventory: {
 		"set of horse shoes": {
 			description: "a set of 4 horseshoes, which you wear on your hooves",
