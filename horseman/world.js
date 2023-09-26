@@ -1235,7 +1235,14 @@ const world = {
 	miltons_office: {
 		bound: true,
 		locked: true,
+		alone: false,
 		turns_in_office: 0,
+		milton_leave: function() {
+			if (this.turns_in_office > 5) {
+				this.alone = true;
+				//this.description =
+			}
+		},
 		can_escape: () => {
 			if (player.location.bound == true) {
 				return "you cant do that, you're bound"
@@ -1266,15 +1273,15 @@ const world = {
 			}
 		},
 		commands: {
-			/*"escape from zipties": () => {
+			"escape from zipties": () => {
 				world.miltons_office.turns_in_office += 1;
-				if (world.miltons_office.bound) {
+				if (world.miltons_office.bound && world.miltons_office.turns_in_office) {
 					world.miltons_office.bound = false;
 					return "With a little effort, you're able to slip your hooves out of the zipties. You remain seated with your hooves behind your back, but you are free. You hear voices and footsteps approaching outside the office door. They stop for a moment outside and you hear Milton's voice coming from beyond the door, 'He's just inside here. Strangest thing I've ever seen - he's a man, but he's also a horse. Right assaulted me too, he did.' They continue past the door and the footsteps fade to silence.";
 				} else {
 					return "Your hooves are already unbound.";
 				}
-			},*/
+			},
 			"get scissors": () => {
 				world.miltons_office.turns_in_office += 1;
 				if (player.location.bound == true) {
