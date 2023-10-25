@@ -1236,8 +1236,9 @@ const world = {
 		bound: true,
 		locked: true,
 		alone: false,
+		milton_alive: true,
 		turns_in_office: 0,
-		milton_leave: function() {
+		milton_leave: () => {
 			if (this.turns_in_office > 5) {
 				this.alone = true;
 				//this.description =
@@ -1258,13 +1259,14 @@ const world = {
 				commands: {
 					"stab milton with scissors": () => {
 						if (player.location.bound == true) {
-							return "you're bound"
+							return "you can't do that, you're tied up!"
 						}
-						return "you are here"
+						
+						if (player.location.milton_alive)
 
 						player.inventory["master key"] = mobile_npc.prince.inventory["master key"];
 						delete mobile_npc.prince.inventory["master key"];
-						return "As he leans in, you swiftly and callously swing the point of the scissors up from behind your back and forcefully drive them into his ear, through his skull, and into his soft brain. He lets out a loud scream which quickly becomes a gurgle, his eyes roll in the back of his head as blood pours out of his ear, and his convulsing body falls to the floor. After a moment the noises and movement stop, and you remove the white key card from the side of Milton's lifeless body. You sigh softly as the weight of taking a man's life crashes down upon you, a single pearly tear rolls out of the corner of your eye and down your cheek. You mourn the violence this world demands for a moment longer, then sniffle lightly as you wipe the sorrow from your face, refocusing on your mission."
+						return "In an act of sheer brutality, you swiftly and callously swing the point of the scissors up from behind your back and forcefully drive them into his ear, through his skull, and into his soft brain. He lets out a loud scream which quickly becomes a gurgle, his eyes roll in the back of his head as blood pours out of his ear, and his convulsing body falls to the floor. After a moment the noises and movement stop, and you remove the white key card from the side of Milton's lifeless body. You sigh softly as the weight of taking a man's life crashes down upon you, a single pearly tear rolls out of the corner of your eye and down your cheek. You mourn the violence this world demands for a moment longer, then sniffle lightly as you wipe the sorrow from your face, refocusing on your mission."
 					},
 					"stab milton": () => {
 						return player.inventory["pair of scissors"].commands["stab milton with scissors"]();
@@ -1285,16 +1287,17 @@ const world = {
 			"get scissors": () => {
 				world.miltons_office.turns_in_office += 1;
 				if (player.location.bound == true) {
-					return "you're bound"
+					return "you can't do that, you're tied up!"
 				}
 				return get_item("pair of scissors");
 			},
 			"exit office": () => {
 				if (player.location.bound == true) {
-					return "you're bound"
+					return "you can't do that, you're tied up!"
 				}
-				player.location.seated = false;
-				
+			},
+			"respond aggressively": () => {
+				return "You consider his question, knowing nothing you say will quell the anger inside him. Whatever consequenses you face will come regardless, so you hold fast to your conviction: 'STFU' you spit at him. 'I beg your pardon?' he asks with a firey rage burning in his eyes. 'Did I stutter?' you snap back without hesitation. Milton glares at you with a snarl on his face. 'You think you're being smart do you?' he says, right before he throws a heavy punch to the right side of your horseface. 'Ugh!' you exclaim involuntarily as the sting sears across your face. You feel a warm liquid begin to flow out of your nose and dribble across your lips. 'We'll see to this then!' he growls at you, before he turns abruptly and leaves the room. You hear the door lock behind him, and the sound of footsteps fade hurriedly away. You are alone, your face is bleeding, "
 			}
 		}
 	},
