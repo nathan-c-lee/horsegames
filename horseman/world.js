@@ -1236,15 +1236,17 @@ const world = {
 		bound: true,
 		locked: true,
 		alone: false,
-		milton_alive: true,
-		turns_in_office: 0,
-		milton_leave: () => {
-			if (this.turns_in_office > 5) {
-				this.alone = true;
-				//this.description =
+		set_desc: 0,
+		description: () => {
+			switch (world.miltons_office.set_desc) {
+				case 0: return "You come to under the greenish white glow of an office flourescent tube. Your hooves are bound with zip ties behind the office chair that you're seated in. There's a computer with a blank screen on the desk, a card reader, a coffee mug full of pens and pencils, scissors, tape and other office supplies. Milton is at the desk, standing and faced away from you, writing hurriedly on a sheet of paper on his desk. He doesn't realize that you've come to. You notice the zip tie around your hooves is loose around your wrists. You think you might be able to wiggle out of it, but just as you think this Milton realizes you've awakened, and looks over at you with anger in his eyes. 'Right then mate, what we gonna do 'bout this then?' he mutters as he leans in toward you. <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent<BR> - suck up and apologize";
+				case 1: return "You are being held captive in Milton's office, your hooves bound with zip ties behind the office chair that you're seated in. Milton is standing watch over you, angered by your assault and further irritated by your inadaquate response to his questioning.<BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent<BR> - suck up and apologize";
+				case 2: return "You are being held captive in Milton's office, your hooves bound with zip ties behind the office chair that you're seated in. Milton is standing watch over you, awaiting your response to his vague questioning. <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent<BR> - suck up and apologize";
+				case 3: return "You are being held captive in Milton's office, your hooves bound with zip ties behind the office chair that you're seated in. Milton has left you locked in the room alone, leaving in a hurried rage after your indignant response to his questioning. You notice a sharp, sturdy looking pair of scissors on Milton's desk across from you, but your hooves are still bound behind your chair. You hear the faint sound of footsteps and voices down the hall outside the door."
+				case 4: return "You are being held captive in Milton's office. Milton has left you locked in the room alone, and you have managed to escape from the zipties. There's a sharp looking pair of scissors on the desk across from you.";
 			}
+			
 		},
-		description: () => {return "You come to under the greenish white glow of an office flourescent tube. Your hooves are bound with zip ties behind the office chair that you're seated in. You're alone, but you hear voices outside the door. There's a computer with a blank screen on the desk, a card reader, a coffee mug full of pens and pencils, scissors, tape and other office supplies. As you await your fate, you notice the zip tie around your hooves is loose around your wrists. You quickly grab the scissors off the desk, and then hide your hands back behind the chair. No sooner do you have your weapon concealed than the door bursts open, Milton storms in with a clipboard and anger in his eyes. 'Right then mate, what we gonna do 'bout this then?' he mutters as he leans in toward you."},
 		items: {
 			"pair of scissors": {
 				description: "a sharp pair of office scissors",
@@ -1268,36 +1270,46 @@ const world = {
 		},
 		commands: {
 			"escape from zipties": () => {
-				world.miltons_office.turns_in_office += 1;
-				if (world.miltons_office.bound && world.miltons_office.turns_in_office) {
+				if (world.miltons_office.bound && world.miltons_office.alone) {
 					world.miltons_office.bound = false;
+					world.miltons_office.set_desc = 4;
 					return "With a little effort, you're able to slip your hooves out of the zipties. You remain seated with your hooves behind your back, but you are free. You hear voices and footsteps approaching outside the office door. They stop for a moment outside and you hear Milton's voice coming from beyond the door, 'He's just inside here. Strangest thing I've ever seen - he's a man, but he's also a horse. Right assaulted me too, he did.' They continue past the door and the footsteps fade to silence.";
-				} else {
+				} else if (!world.miltons_office.bound && world.miltons_office.alone) {
 					return "Your hooves are already unbound.";
+				} else {
+					world.miltons_office.set_desc = 2;
+					return "You consider escaping from the zipties, but then think better of it with Milton keeping a close eye on you.";
 				}
 			},
+			"escape": () => {return world.miltons_office.commands["escape from zipties"]();},
 			"get scissors": () => {
-				world.miltons_office.turns_in_office += 1;
 				if (player.location.bound == true) {
 					return "you can't do that, you're tied up!";
 				}
 				return get_item("pair of scissors");
 			},
 			"exit office": () => {
-				world.miltons_office.turns_in_office += 1;
 				if (player.location.bound == true) {
-					return "you can't do that, you're tied up!";
+					return "You can't do that, you're tied up!";
 				}
+				if (player.location.locked == true) {
+					return "You're free from the zipties, but the door is locked! your trapped in Milton's office. "
+				}
+				return "Successful escape! change player location and proceed from there!"
 			},
-			"wait": () => {
-				world.miltons_office.turns_in_office += 1;
-				return "You wait silently, looking around the room.";
-			},
+			"leave office": () => {return world.miltons_office.commands["exit office"]();},
 			"respond aggressively": () => {
-				return "You consider his question, knowing nothing you say will quell the anger inside him. Whatever consequenses you face will come regardless, so you hold fast to your conviction: 'STFU' you spit at him. 'I beg your pardon?' he asks with a firey rage burning in his eyes. 'Did I stutter?' you snap back without hesitation. Milton glares at you with a snarl on his face. 'You think you're being smart do you?' he says, right before he throws a heavy punch to the right side of your horseface. 'Ugh!' you exclaim involuntarily as the sting sears across your face. You feel a warm liquid begin to flow out of your nose and dribble across your lips. 'We'll see to this then!' he growls at you, before he turns abruptly and leaves the room. You hear the door lock behind him, and the sound of footsteps fade hurriedly away. You are alone, your face is bleeding, and you know you dont have much time before Milton returns."
+				world.miltons_office.alone = true;
+				world.miltons_office.set_desc = 3;
+				return "You consider his question, knowing nothing you say will quell the anger inside him. Whatever consequenses you face will come regardless, so you hold fast to your conviction: 'STFU' you spit at him. 'I beg your pardon?' he asks with a firey rage burning in his eyes. 'Did I stutter?' you snap back without hesitation. Milton glares at you with a snarl on his face. 'You think you're being smart do you?' he says, right before he throws a heavy punch to the right side of your horseface. 'Ugh!' you exclaim involuntarily as the sting sears across your face. You feel a warm liquid begin to flow out of your nose and dribble across your lips. 'We'll see to this then!' he growls at you, before he turns abruptly and leaves the room. You hear the door lock behind him, and the sound of footsteps fade hurriedly away. You are alone, your face is bleeding, and you know you dont have much time before Milton returns.";
 			}, 
-			"no response": () => {
-				return "You hear his question, but you do not answer. You look up at him with your beady little horse eyes and tuck your horse lips into your mouth tightly, making it clear that you're taking the fifth. 'Alright then, you little shit' he sneers at you. 'We'll sort you out, mate' he says before heading out the door, locking it behind him. You hear his footsteps fade down the hallway. You are alone, for now."
+			"remain silent": () => {
+				world.miltons_office.set_desc = 1;
+				return "You hear his question, but you do not answer. You look up at him with your beady little horse eyes and tuck your horse lips into your mouth tightly, making it clear that you're taking the fifth. 'Alright then, you little shit,' he sneers at you. 'We'll just sit here till you feel like talking then!' he exclaims as he sits down and props his feet up high on his desk, making himself comfortable and glaring at you. 'We can hang out here all day, mate' he says to you, reclining in his office chair.";
+			},
+			"suck up and apologize": () => {
+				world.miltons_office.set_desc = 1;
+				return "You realize that you Milton is justifiably angry with you, and probably wants to beat the tar out of you. You're not sure what he's planning, but perhaps you can smooth things over a bit and talk him down. 'Listen,' you begin timidly, 'I'm sorry I struck you. I don't know what came over me.' <BR>An awkward, silent moment passes. Finally, Milton responds:<BR>'Oh you're sorry? You're sorry mate? Well sorry ain't gonna pay for the stitches they're gonna put in my face,' indicating his split lip. 'You're sorry as can be mate, but you'll have to do better than that.'<BR>Unfortunately, there doesn't seem to be any way to repair the damage you've done at this point'";
 			}
 		}
 	},

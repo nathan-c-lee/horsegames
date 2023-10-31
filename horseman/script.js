@@ -118,6 +118,7 @@ function move_mobile_npcs(command_output, skip) {
 };
 
 
+
 submit.onclick = () => {
 	const new_p = process_input(input.value.toLowerCase());
 	const player_command = document.createElement("p");
@@ -134,3 +135,5 @@ input.onkeydown = (ev) => {
 		submit.click();
 	}
 }
+
+input.focus();
