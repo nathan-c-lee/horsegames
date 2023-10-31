@@ -1244,14 +1244,6 @@ const world = {
 				//this.description =
 			}
 		},
-		can_escape: () => {
-			if (player.location.bound == true) {
-				return "you cant do that, you're bound"
-			}
-			if (player.location.locked == true) {
-				return "you cant get out, the door is locked."
-			}
-		},
 		description: () => {return "You come to under the greenish white glow of an office flourescent tube. Your hooves are bound with zip ties behind the office chair that you're seated in. You're alone, but you hear voices outside the door. There's a computer with a blank screen on the desk, a card reader, a coffee mug full of pens and pencils, scissors, tape and other office supplies. As you await your fate, you notice the zip tie around your hooves is loose around your wrists. You quickly grab the scissors off the desk, and then hide your hands back behind the chair. No sooner do you have your weapon concealed than the door bursts open, Milton storms in with a clipboard and anger in his eyes. 'Right then mate, what we gonna do 'bout this then?' he mutters as he leans in toward you."},
 		items: {
 			"pair of scissors": {
@@ -1287,17 +1279,25 @@ const world = {
 			"get scissors": () => {
 				world.miltons_office.turns_in_office += 1;
 				if (player.location.bound == true) {
-					return "you can't do that, you're tied up!"
+					return "you can't do that, you're tied up!";
 				}
 				return get_item("pair of scissors");
 			},
 			"exit office": () => {
+				world.miltons_office.turns_in_office += 1;
 				if (player.location.bound == true) {
-					return "you can't do that, you're tied up!"
+					return "you can't do that, you're tied up!";
 				}
 			},
+			"wait": () => {
+				world.miltons_office.turns_in_office += 1;
+				return "You wait silently, looking around the room.";
+			},
 			"respond aggressively": () => {
-				return "You consider his question, knowing nothing you say will quell the anger inside him. Whatever consequenses you face will come regardless, so you hold fast to your conviction: 'STFU' you spit at him. 'I beg your pardon?' he asks with a firey rage burning in his eyes. 'Did I stutter?' you snap back without hesitation. Milton glares at you with a snarl on his face. 'You think you're being smart do you?' he says, right before he throws a heavy punch to the right side of your horseface. 'Ugh!' you exclaim involuntarily as the sting sears across your face. You feel a warm liquid begin to flow out of your nose and dribble across your lips. 'We'll see to this then!' he growls at you, before he turns abruptly and leaves the room. You hear the door lock behind him, and the sound of footsteps fade hurriedly away. You are alone, your face is bleeding, "
+				return "You consider his question, knowing nothing you say will quell the anger inside him. Whatever consequenses you face will come regardless, so you hold fast to your conviction: 'STFU' you spit at him. 'I beg your pardon?' he asks with a firey rage burning in his eyes. 'Did I stutter?' you snap back without hesitation. Milton glares at you with a snarl on his face. 'You think you're being smart do you?' he says, right before he throws a heavy punch to the right side of your horseface. 'Ugh!' you exclaim involuntarily as the sting sears across your face. You feel a warm liquid begin to flow out of your nose and dribble across your lips. 'We'll see to this then!' he growls at you, before he turns abruptly and leaves the room. You hear the door lock behind him, and the sound of footsteps fade hurriedly away. You are alone, your face is bleeding, and you know you dont have much time before Milton returns."
+			}, 
+			"no response": () => {
+				return "You hear his question, but you do not answer. You look up at him with your beady little horse eyes and tuck your horse lips into your mouth tightly, making it clear that you're taking the fifth. 'Alright then, you little shit' he sneers at you. 'We'll sort you out, mate' he says before heading out the door, locking it behind him. You hear his footsteps fade down the hallway. You are alone, for now."
 			}
 		}
 	},
