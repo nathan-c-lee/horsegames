@@ -86,8 +86,6 @@ function process_input(in_val) {
 	return terminal_output;
 };
 
-
-
 function move_mobile_npcs(command_output, skip) {
 	for (let npc in mobile_npc) {
 		if (npc == skip) {
@@ -116,8 +114,6 @@ function move_mobile_npcs(command_output, skip) {
 	}
 	return command_output;
 };
-
-
 
 submit.onclick = () => {
 	const new_p = process_input(input.value.toLowerCase());

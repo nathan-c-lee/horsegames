@@ -1,3 +1,4 @@
+// beachfront constructor class. creates all uniform beachfront objects north and south of hotel beachfront.
 class beachfront {
 	constructor(iter) {
 		this.description = () => {return "You're on the white sandy beach of Horsey Island, continuing to the north and south for miles."};
@@ -42,6 +43,7 @@ class beachfront {
 	}
 };
 
+// hotel room constructor class. creates all hotel room interiors. 
 class hotel_room {
 	constructor(rm_index, fl) {
 		let section;
@@ -90,8 +92,9 @@ class hotel_room {
 	}
 };
 
+// elevator constructor. constructs all elevators.
+// needs work plugging into basement, must create basement first.
 class elevator {
-	
 	constructor(elev) {
 		this.floor = "L";
 		this.description = () => {
@@ -178,12 +181,11 @@ class elevator {
 	};
 };
 
+// hotel floor constructor. constructs all floors and calls hotel room constructor, creating all hotel rooms.
 class hotel_floor {
-
 	constructor(floor) {
 
 		function make_commands(rooms, section) {
-			
 			for (let room in rooms) {
 				if (room >= section.r_start && room <= section.r_end) {
 					let rm_num;
@@ -584,18 +586,19 @@ class hotel_floor {
 	}
 };
 
+// instantiate all uniform beachfronts with beachfront constructor.
 let beachfronts = [];
-
 for (let i = 0; i < 14; i++) {
 	beachfronts[i] = new beachfront(i);
 };
 
+// instantiate all hotel floors and rooms.
 let floors = [];
-
 for (let j = 2; j < 9; j++) {
 	floors[j] = new hotel_floor(String(j));
 }
 
+// instantiate all elevators
 const elevators = {
 	elev_14: new elevator(14),
 	elev_24: new elevator(24),
@@ -603,16 +606,19 @@ const elevators = {
 	elev_64: new elevator(64)
 };
 
+// get item function moves item from player location to player inventory.
 function get_item(item_name) {
 	const item = player.location.items[item_name];
 	if (item === undefined) {
-		return `there isnt a ${item_name} here`;
+		return `There isn't a ${item_name} here`;
 	}
 	player.inventory[item_name] = item;
 	delete player.location.items[item_name];
-	return `you got the ${item_name}. it is now in your inventory.`;
+	return `You got the ${item_name}. it is now in your inventory.`;
 };
 
+// world object. contains all unique location objects that are not
+// instantiated by a constructor class.
 const world = {
 	north_pool: {
 		description: () => {
@@ -1350,6 +1356,7 @@ const world = {
 	*/
 };
 
+// all moveable npc objects. (immobile npcs are part of location descriptions)
 const mobile_npc = {
 	"THE Mitchall LeBratten": {
 		move_on: 2,
@@ -1406,6 +1413,7 @@ const mobile_npc = {
 	}
 };
 
+// player object (inventory, default and debug commands )
 const player = {
 	//START LOCATION
 	location: world.miltons_office,
@@ -1490,4 +1498,6 @@ const player = {
 	}
 };
 
+// export npcs and player. needed world info is passed as player.location or
+// npc.location. actual world object is not needed by main script.
 export {mobile_npc, player};
