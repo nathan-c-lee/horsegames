@@ -1243,6 +1243,7 @@ const world = {
 		locked: true,
 		alone: false,
 		set_desc: 0,
+		resp_opts: {sil: true, apo: true},
 		description: () => {
 			switch (world.miltons_office.set_desc) {
 				case 0: return "0You come to under the greenish white glow of an office flourescent tube. Your hooves are bound with zip ties behind the office chair that you're seated in. There's a computer with a blank screen on the desk, a card reader, a coffee mug full of pens and pencils, scissors, tape and other office supplies. Milton is at the desk, standing and faced away from you, writing hurriedly on a sheet of paper on his desk. He doesn't realize that you've come to. You notice the zip tie around your hooves is loose around your wrists. You think you might be able to wiggle out of it, but just as you think this Milton realizes you've awakened, and looks over at you with anger in his eyes. 'Right then mate, what we gonna do 'bout this then?' he mutters as he leans in toward you. <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent<BR> - suck up and apologize";
@@ -1305,19 +1306,39 @@ const world = {
 			},
 			"leave office": () => {return world.miltons_office.commands["exit office"]();},
 			"respond aggressively": () => {
+				if (world.miltons_office.alone) {
+					return "Milton already left the room, there's no one here to hear you."
+				};
 				world.miltons_office.alone = true;
 				world.miltons_office.set_desc = 3;
 				return "You consider his question, knowing nothing you say will quell the anger inside him. Whatever consequenses you face will come regardless, so you hold fast to your conviction: 'STFU' you spit at him. 'I beg your pardon?' he asks with a firey rage burning in his eyes. 'Did I stutter?' you snap back without hesitation. Milton glares at you with a snarl on his face. 'You think you're being smart do you?' he says, right before he throws a heavy punch to the right side of your horseface. 'Ugh!' you exclaim involuntarily as the sting sears across your face. You feel a warm liquid begin to flow out of your nose and dribble across your lips. 'We'll see to this then!' he growls at you, before he turns abruptly and leaves the room. You hear the door lock behind him, and the sound of footsteps fade hurriedly away. You are alone, your face is bleeding, and you know you dont have much time before Milton returns.";
 			}, 
 			"remain silent": () => {
+				if (world.miltons_office.alone) {
+					return "Milton already left the room, there's no one here for you to remain silent for."
+				};
+				let base_resp = "You hear his question, but you do not answer. You look up at him with your beady little horse eyes and tuck your horse lips into your mouth tightly, making it clear that you're taking the fifth. 'Alright then, you little shit,' he sneers at you. 'We'll just sit here till you feel like talking then!' he exclaims as he sits down and props his feet up high on his desk, making himself comfortable and glaring at you. 'We can hang out here all day, mate' he says to you, reclining in his office chair. He continues to await an adequate response.";
 				world.miltons_office.set_desc = 1;
-				return "You hear his question, but you do not answer. You look up at him with your beady little horse eyes and tuck your horse lips into your mouth tightly, making it clear that you're taking the fifth. 'Alright then, you little shit,' he sneers at you. 'We'll just sit here till you feel like talking then!' he exclaims as he sits down and props his feet up high on his desk, making himself comfortable and glaring at you. 'We can hang out here all day, mate' he says to you, reclining in his office chair. He continues to await an adequate response. <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent<BR> - suck up and apologize.";
+				world.miltons_office.resp_opts.sil = false;
+				if (world.miltons_office.resp_opts.apo) {return `${base_resp} <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively <BR> - suck up and apologize.`};
+				return `${base_resp} <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively`;
 			},
 			"suck up and apologize": () => {
+				if (world.miltons_office.alone) {
+					return "Milton already left the room, there's no one here to hear you."
+				};
+				let base_resp = "You realize that you Milton is justifiably angry with you, and probably wants to beat the tar out of you. You're not sure what he's planning, but perhaps you can smooth things over a bit and talk him down. 'Listen,' you begin timidly, 'I'm sorry I struck you. I don't know what came over me.' <BR>An awkward, silent moment passes. Finally, Milton responds:<BR>'Oh you're sorry? You're sorry mate? Well sorry ain't gonna pay for the stitches they're gonna put in my face,' indicating his split lip. 'You're sorry as can be mate, but you'll have to do better than that.'<BR>Unfortunately, there doesn't seem to be any way to repair the damage you've done at this point. He continues to await an adequate response.";
 				world.miltons_office.set_desc = 1;
-				return "You realize that you Milton is justifiably angry with you, and probably wants to beat the tar out of you. You're not sure what he's planning, but perhaps you can smooth things over a bit and talk him down. 'Listen,' you begin timidly, 'I'm sorry I struck you. I don't know what came over me.' <BR>An awkward, silent moment passes. Finally, Milton responds:<BR>'Oh you're sorry? You're sorry mate? Well sorry ain't gonna pay for the stitches they're gonna put in my face,' indicating his split lip. 'You're sorry as can be mate, but you'll have to do better than that.'<BR>Unfortunately, there doesn't seem to be any way to repair the damage you've done at this point. He continues to await an adequate response. <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent<BR> - suck up and apologize.";
+				world.miltons_office.resp_opts.apo = false;
+				if (world.miltons_office.resp_opts.sil) {return `${base_resp} <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively <BR> - remain silent.`};
+				return `${base_resp} <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively`;
+				//return <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent.";
 			},
-			"apologize": () => {return world.miltons_office.commands["suck up and apologize"]();}
+			"apologize": () => {return world.miltons_office.commands["suck up and apologize"]();},
+			"inspect desk": () => {
+				if (world.miltons_office.bound) {return "You can see Milton's desk from the chair. There's a computer, some papers, scissors - regular office things. You cant get a close look though, being bound in your chair."};
+				if (!world.miltons_office.alone) {return "You can see Milton's desk, and he's seated in the chair behind it. There's a computer, some papers, scissors - regular office things - but you don't dare reveal that you've freed your hooves. You remain seated."};
+			}
 		}
 	},
 	sunrise_emp_hall: {
