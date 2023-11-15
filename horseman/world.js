@@ -1338,6 +1338,9 @@ const world = {
 			"inspect desk": () => {
 				if (world.miltons_office.bound) {return "You can see Milton's desk from the chair. There's a computer, some papers, scissors - regular office things. You cant get a close look though, being bound in your chair."};
 				if (!world.miltons_office.alone) {return "You can see Milton's desk, and he's seated in the chair behind it. There's a computer, some papers, scissors - regular office things - but you don't dare reveal that you've freed your hooves. You remain seated."};
+				you are here
+				if (player.inventory["pair of scissors"]) {return "You take a look over Milton's desk. Mostly it seems quite ordinary, regular office things are found on it. Pens and pencils, stapler, tape dispenser, paperclips and etc. There are notably no scissors, you've already taken them and they are now in your inventory. "};
+				return "desk scissors";
 			}
 		}
 	},
