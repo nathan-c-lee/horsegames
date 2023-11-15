@@ -1243,14 +1243,28 @@ const world = {
 		locked: true,
 		alone: false,
 		set_desc: 0,
+		turns_alone: 0,
 		resp_opts: {sil: true, apo: true},
+		milton_return: (action) => {
+			you are here
+			if (world.miltons_office.alone) {
+				console.log('youre still alone')
+				if (world.miltons_office.turns_alone >= 3) {
+					console.log('miltons back')
+					return `you're inturrupted in the middle of ${action} when Milton returns.`;
+				};
+				world.miltons_office.turns_alone += 1;
+			} else {
+				return "helloooooo";
+			}
+		},
 		description: () => {
 			switch (world.miltons_office.set_desc) {
-				case 0: return "0You come to under the greenish white glow of an office flourescent tube. Your hooves are bound with zip ties behind the office chair that you're seated in. There's a computer with a blank screen on the desk, a card reader, a coffee mug full of pens and pencils, scissors, tape and other office supplies. Milton is at the desk, standing and faced away from you, writing hurriedly on a sheet of paper on his desk. He doesn't realize that you've come to. You notice the zip tie around your hooves is loose around your wrists. You think you might be able to wiggle out of it, but just as you think this Milton realizes you've awakened, and looks over at you with anger in his eyes. 'Right then mate, what we gonna do 'bout this then?' he mutters as he leans in toward you. <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent<BR> - suck up and apologize";
-				case 1: return "1You are being held captive in Milton's office, your hooves bound with zip ties behind the office chair that you're seated in. Milton is standing watch over you, angered by your assault and further irritated by your inadaquate response to his questioning. 'You'll have to answer for your actions one way or another mate,' he presses you. <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent<BR> - suck up and apologize";
-				case 2: return "2You are being held captive in Milton's office, your hooves bound with zip ties behind the office chair that you're seated in. Milton is standing watch over you, awaiting your response to his vague questioning. 'Let's hear it mate!' he exclaims at you. <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent<BR> - suck up and apologize";
-				case 3: return "3You are being held captive in Milton's office, your hooves bound with zip ties behind the office chair that you're seated in. Milton has left you locked in the room alone, leaving in a hurried rage after your indignant response to his questioning. You notice a sharp, sturdy looking pair of scissors on Milton's desk across from you, but your hooves are still bound behind your chair. You hear the faint sound of footsteps and voices down the hall outside the door."
-				case 4: return "4You are being held captive in Milton's office. Milton has left you locked in the room alone, and you have managed to escape from the zipties. There's a sharp looking pair of scissors on the desk across from you.";
+				case 0: return "You come to under the greenish white glow of an office flourescent tube. Your hooves are bound with zip ties behind the office chair that you're seated in. There's a computer with a blank screen on the desk, a card reader, a coffee mug full of pens and pencils, scissors, tape and other office supplies. Milton is at the desk, standing and faced away from you, writing hurriedly on a sheet of paper on his desk. He doesn't realize that you've come to. You notice the zip tie around your hooves is loose around your wrists. You think you might be able to wiggle out of it, but just as you think this Milton realizes you've awakened, and looks over at you with anger in his eyes. 'Right then mate, what we gonna do 'bout this then?' he mutters as he leans in toward you. <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent<BR> - suck up and apologize";
+				case 1: return "You are being held captive in Milton's office, your hooves bound with zip ties behind the office chair that you're seated in. Milton is standing watch over you, angered by your assault and further irritated by your inadaquate response to his questioning. 'You'll have to answer for your actions one way or another mate,' he presses you. <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent<BR> - suck up and apologize";
+				case 2: return "You are being held captive in Milton's office, your hooves bound with zip ties behind the office chair that you're seated in. Milton is standing watch over you, awaiting your response to his vague questioning. 'Let's hear it mate!' he exclaims at you. <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent<BR> - suck up and apologize";
+				case 3: return "You are being held captive in Milton's office, your hooves bound with zip ties behind the office chair that you're seated in. Milton has left you locked in the room alone, leaving in a hurried rage after your indignant response to his questioning. You notice a sharp, sturdy looking pair of scissors on Milton's desk across from you, but your hooves are still bound behind your chair. You hear the faint sound of footsteps and voices down the hall outside the door."
+				case 4: return "You are being held captive in Milton's office. Milton has left you locked in the room alone, and you have managed to escape from the zipties. There's a sharp looking pair of scissors on the desk across from you.";
 			}
 			
 		},
@@ -1259,11 +1273,13 @@ const world = {
 				description: "a sharp pair of office scissors",
 				commands: {
 					"stab milton with scissors": () => {
-						if (player.location.bound == true) {
-							return "you can't do that, you're tied up!"
+						if (world.miltons_office.bound) {
+							return "you can't do that, you're tied up!";
 						}
 						
-						if (player.location.milton_alive)
+						if (world.miltons_office.alone) {
+							return "Milton hasn't returned, you're all alone in his office.";
+						}
 
 						player.inventory["master key"] = mobile_npc.prince.inventory["master key"];
 						delete mobile_npc.prince.inventory["master key"];
@@ -1273,10 +1289,15 @@ const world = {
 						return player.inventory["pair of scissors"].commands["stab milton with scissors"]();
 					}
 				}
+			},
+			"incident report": {
+				description: "an official looking document detailing how you assaulted Milton",
+				commands: {}
 			}
 		},
 		commands: {
 			"escape from zipties": () => {
+				world.miltons_office.milton_return("escaping");
 				if (world.miltons_office.bound && world.miltons_office.alone) {
 					world.miltons_office.bound = false;
 					world.miltons_office.set_desc = 4;
@@ -1289,17 +1310,34 @@ const world = {
 				}
 			},
 			"escape": () => {return world.miltons_office.commands["escape from zipties"]();},
-			"get scissors": () => {
-				if (player.location.bound == true) {
+			"get pair of scissors": () => {
+				world.miltons_office.milton_return("scissors");
+				if (world.miltons_office.bound) {
 					return "you can't do that, you're tied up!";
+				}
+				if (!world.miltons_office.alone) {
+					return "you can't do that, Milton's watching you like a hawk!";
 				}
 				return get_item("pair of scissors");
 			},
+			"get scissors": () => {return world.miltons_office.commands["get pair of scissors"]();},
+			"get incident report": () => {
+				world.miltons_office.milton_return("report");
+				if (world.miltons_office.bound) {
+					return "you can't do that, you're tied up!";
+				}
+				if (!world.miltons_office.alone) {
+					return "you can't do that, Milton's watching you like a hawk!";
+				}
+				return get_item("incident report");
+			},
+			"get report": () => {return world.miltons_office.commands["get incident report"]()},
 			"exit office": () => {
-				if (player.location.bound == true) {
+				world.miltons_office.milton_return("leaving");
+				if (world.miltons_office.bound) {
 					return "You can't do that, you're tied up!";
 				}
-				if (player.location.locked == true) {
+				if (world.miltons_office.locked) {
 					return "You're free from the zipties, but the door is locked! your trapped in Milton's office. "
 				}
 				return "Successful escape! change player location and proceed from there!"
@@ -1336,11 +1374,21 @@ const world = {
 			},
 			"apologize": () => {return world.miltons_office.commands["suck up and apologize"]();},
 			"inspect desk": () => {
+				world.miltons_office.milton_return("inspecting desk");
 				if (world.miltons_office.bound) {return "You can see Milton's desk from the chair. There's a computer, some papers, scissors - regular office things. You cant get a close look though, being bound in your chair."};
 				if (!world.miltons_office.alone) {return "You can see Milton's desk, and he's seated in the chair behind it. There's a computer, some papers, scissors - regular office things - but you don't dare reveal that you've freed your hooves. You remain seated."};
-				you are here
-				if (player.inventory["pair of scissors"]) {return "You take a look over Milton's desk. Mostly it seems quite ordinary, regular office things are found on it. Pens and pencils, stapler, tape dispenser, paperclips and etc. There are notably no scissors, you've already taken them and they are now in your inventory. "};
-				return "desk scissors";
+				let report_txt = "";
+				let scissors_txt;
+				
+				if (world.miltons_office.items["pair of scissors"]) {
+					scissors_txt = "There's a sharp looking pair of scissors on the desk, they're probably the closest thing to a weapon in the room. ";
+				} else {
+					scissors_txt = "There are notably no scissors, you've already taken them and they are now in your inventory. ";
+				};
+				if (world.miltons_office.items["incident report"]) {
+					report_txt = " A document titled 'Incident Report' lies near the keyboard. Under the title a smaller heading reads 'Incident Type: ASSAULT.' It appears to be a report of your tussle with Milton, it may be in your interest to make it disappear.";
+				};
+				return `You take a look over Milton's desk. Mostly it seems quite ordinary, regular office things are found on it. Pens and pencils, stapler, tape dispenser, paperclips and etc. ${scissors_txt}There's a computer, displaying a login page for user 'MPRINCE.' Some sticky notes with various messages and information scrawled on them are scattered around the monitor and keyboard. Nothing immediately appears to be a password. ${report_txt}`;
 			}
 		}
 	},
