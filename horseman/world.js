@@ -1246,17 +1246,25 @@ const world = {
 		turns_alone: 0,
 		resp_opts: {sil: true, apo: true},
 		milton_return: (action) => {
-			you are here
+			//you are here
 			if (world.miltons_office.alone) {
 				console.log('youre still alone')
-				if (world.miltons_office.turns_alone >= 3) {
+				if (world.miltons_office.turns_alone == 3) {
 					console.log('miltons back')
-					return `you're inturrupted in the middle of ${action} when Milton returns.`;
+					let scissors_txt;
+					if (player.inventory["pair of scissors"]) {
+						scissors_txt = "You grip the pair of scissors from Milton's desk tightly with your hoof. It looks like you may have to defend yourself.";
+					} else {
+						scissors_txt = "He seems to have hostile intent. It looks like you may have to defend yourself. Your hooves are unbound, but unforunately you dont have anything that can serve as a weapon. Hopefully you'll be able to ward off his monsterous advances.";
+					}
+					//world.miltons_office.alone = false;
+					//needs to switch at the end of calling function, not here. otherwise it screws up the output. 
+					//can check for world.miltons_office.turns_alone > 3
+					return `<BR><BR>Just as you finish ${action}, you hear the sound of footsteps outside the door, and someone manipulating the lock on the other side of the door. You dash back to the chair and pretend to be bound again, just as the door begins to open. Milton returns through the doorway, a briefcase in one hand and a sadistic looking grin on his face. 'Alright then mate, let's see if we can get some answers...' he begins. ${scissors_txt}`;
 				};
 				world.miltons_office.turns_alone += 1;
-			} else {
-				return "helloooooo";
 			}
+			return "";
 		},
 		description: () => {
 			switch (world.miltons_office.set_desc) {
@@ -1297,13 +1305,13 @@ const world = {
 		},
 		commands: {
 			"escape from zipties": () => {
-				world.miltons_office.milton_return("escaping");
+				let milton_returned = world.miltons_office.milton_return("escaping");
 				if (world.miltons_office.bound && world.miltons_office.alone) {
 					world.miltons_office.bound = false;
 					world.miltons_office.set_desc = 4;
-					return "With a little effort, you're able to slip your hooves out of the zipties. You remain seated with your hooves behind your back, but you are free. You hear voices and footsteps approaching outside the office door. They stop for a moment outside and you hear Milton's voice coming from beyond the door, 'He's just inside here. Strangest thing I've ever seen - he's a man, but he's also a horse. Right assaulted me too, he did.' They continue past the door and the footsteps fade to silence.";
+					return `With a little effort, you're able to slip your hooves out of the zipties. You remain seated with your hooves behind your back, but you are free. You hear voices and footsteps approaching outside the office door. They stop for a moment outside and you hear Milton's voice coming from beyond the door, 'He's just inside here. Strangest thing I've ever seen - he's a man, but he's also a horse. Right assaulted me too, he did.' They continue past the door and the footsteps fade to silence. ${milton_returned}`;
 				} else if (!world.miltons_office.bound && world.miltons_office.alone) {
-					return "Your hooves are already unbound.";
+					return `Your hooves are already unbound.${milton_returned}`;
 				} else {
 					world.miltons_office.set_desc = 2;
 					return "You consider escaping from the zipties, but then think better of it with Milton keeping a close eye on you.";
