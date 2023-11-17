@@ -607,14 +607,20 @@ const elevators = {
 };
 
 // get item function moves item from player location to player inventory.
-function get_item(item_name) {
+function get_item(item_name, pre, post) {
 	const item = player.location.items[item_name];
+	let pretext;
+	let posttext;
+	if (pre) {pretext = pre + "<BR><BR>";}
+	if (post) {posttext = "<BR><BR>" + post;}
+	if (pretext === undefined) {pretext = "";}
+	if (posttext === undefined) {posttext = "";}
 	if (item === undefined) {
-		return `There isn't a ${item_name} here`;
+		return `${pretext}There isn't a ${item_name} here.${posttext}`;
 	}
 	player.inventory[item_name] = item;
 	delete player.location.items[item_name];
-	return `You got the ${item_name}. it is now in your inventory.`;
+	return `${pretext}You got the ${item_name}. it is now in your inventory.${posttext}`;
 };
 
 // world object. contains all unique location objects that are not
@@ -922,6 +928,7 @@ const world = {
 			}
 		}
 	},
+
 	seaglass: {
 		description: () => {return "You are in the seaglass lounge. The lounge is bustling with activity, resort guests scattered around the various seating in the room. Two bartenders are behind the bar, busily exchanging banter and helping numerous people. The hotel lobby lies to the south."},
 		commands: {
@@ -944,6 +951,7 @@ const world = {
 			}
 		}
 	},
+
 	front_entrance: {
 		description: () => {return "You are at the front entrance of the Luxe Horsey Island Resort. Several bellmen and valets are present, some assisting hotel guests with luggage or their vehicles, others waiting attentively for any opportunity to assist. In particular, a friendly looking man, who's nametag reads 'Raymond DeScott', is smiling and greeting people enthusiastically as he opens the front door to the lobby for the many people going in and out. You may enter the lobby to the east through Raymond's door, or travel along the hotel's outdoor hallway to the north, or enter the breezeway to your south. You may also take the steps to your west down onto the front drive, where several cars are waiting under the porte-cochère."},
 		commands: {
@@ -972,6 +980,7 @@ const world = {
 			}
 		}
 	},
+
 	front_drive: {
 		description: () => {return "You are on the front driveway of the Luxe Hotel, under the porte-cochère. There are vehicles coming and going, and valet attendents running around hurriedly, and bellmen bringing and taking cartfuls of luggage to and from the numerous cars on the drive way. You may go up the steps leading to the front entrance to the east, or you may go to the tram stop to your west."},
 		commands: {
@@ -987,6 +996,7 @@ const world = {
 			}
 		}
 	},
+
 	lobby_48elev_landing: {
 		////add an elevator
 		description: () => {return "You are at the elevator landing in the main lobby of the hotel. A passage to the north leads into the lobby, where the sounds of travellers arriving and departing echo through the building. The elevator is accessible here, as well as the concierge office."},
@@ -1008,6 +1018,7 @@ const world = {
 			}
 		}
 	},
+
 	breezeway_north: {
 		description: () => {return "You are on the north end of the breezeway. The front entrance to the hotel is busy with activity to your north, and the breezeway continues south."},
 		commands: {
@@ -1126,6 +1137,7 @@ const world = {
 			}
 		}
 	},
+
 	breezeway_south: {
 		description: () => {return "You are on the south end of the breezeway, which continues to the north. To the east, the elevator landing by room 124 lies at the bottom of the ramp, and to the south a glass double door leads into the sunrise lobby, where you smell bacon."},
 		commands: {
@@ -1177,6 +1189,7 @@ const world = {
 			}
 		}
 	},
+
 	sunrise_14elev_landing: {
 		description: () => {return "You are in the sunrise lobby, at the elevator landing nearest to room 112. To your south, a doorway leads out of the sunrise lobby to the hallway. To your north, the sunrise lobby is busy with activity - mostly guests waiting in line to be seated in the sunrise cafe, which fills the entire lobby with the delicious aroma of bacon and eggs."},
 		commands: {
@@ -1199,6 +1212,7 @@ const world = {
 			}
 		}
 	},
+
 	sunrise_14elev_basement_landing: {
 		description: () => {return "You are in the basement level of the hotel, at the sunrise elevator landing. The elevator is accessable here, and to the east a doorway leads out onto the oceanview terrace."},
 		commands: {
@@ -1216,6 +1230,7 @@ const world = {
 			}
 		}
 	},
+
 	section101_112: {
 		description: () => {return "You are on the lobby floor, in the section of hallway south of the sunrise lobby, between rooms 101 and 112. To your north, a set of glass doors leads to the sunrise lobby elevator. To the west, a foot path is accessable which leads to the captain's court villas - just south of the hotel."},
 		commands: {
@@ -1260,7 +1275,7 @@ const world = {
 					//world.miltons_office.alone = false;
 					//needs to switch at the end of calling function, not here. otherwise it screws up the output. 
 					//can check for world.miltons_office.turns_alone > 3
-					return `<BR><BR>Just as you finish ${action}, you hear the sound of footsteps outside the door, and someone manipulating the lock on the other side of the door. You dash back to the chair and pretend to be bound again, just as the door begins to open. Milton returns through the doorway, a briefcase in one hand and a sadistic looking grin on his face. 'Alright then mate, let's see if we can get some answers...' he begins. ${scissors_txt}`;
+					return `Just as you finish ${action}, you hear the sound of footsteps outside the door, and someone manipulating the lock on the other side of the door. You dash back to the chair and pretend to be bound again, just as the door begins to open. Milton returns through the doorway, a briefcase in one hand and a sadistic looking grin on his face. 'Alright then mate, let's see if we can get some answers...' he begins. ${scissors_txt}`;
 				};
 				world.miltons_office.turns_alone += 1;
 			}
@@ -1306,12 +1321,21 @@ const world = {
 		commands: {
 			"escape from zipties": () => {
 				let milton_returned = world.miltons_office.milton_return("escaping");
+				
 				if (world.miltons_office.bound && world.miltons_office.alone) {
 					world.miltons_office.bound = false;
 					world.miltons_office.set_desc = 4;
-					return `With a little effort, you're able to slip your hooves out of the zipties. You remain seated with your hooves behind your back, but you are free. You hear voices and footsteps approaching outside the office door. They stop for a moment outside and you hear Milton's voice coming from beyond the door, 'He's just inside here. Strangest thing I've ever seen - he's a man, but he's also a horse. Right assaulted me too, he did.' They continue past the door and the footsteps fade to silence. ${milton_returned}`;
+					if (milton_returned) {
+						console.log(milton_returned);
+						world.miltons_office.alone = false;
+					}
+					return `With a little effort, you're able to slip your hooves out of the zipties. You remain seated with your hooves behind your back, but you are free. You hear voices and footsteps approaching outside the office door. They stop for a moment outside and you hear Milton's voice coming from beyond the door, 'He's just inside here. Strangest thing I've ever seen - he's a man, but he's also a horse. Right assaulted me too, he did.' They continue past the door and the footsteps fade to silence. ${"<BR><BR>" + milton_returned}`;
 				} else if (!world.miltons_office.bound && world.miltons_office.alone) {
-					return `Your hooves are already unbound.${milton_returned}`;
+					if (milton_returned) {
+						console.log(milton_returned);
+						world.miltons_office.alone = false;
+					}
+					return `Your hooves are already unbound.${"<BR><BR>" + milton_returned}`;
 				} else {
 					world.miltons_office.set_desc = 2;
 					return "You consider escaping from the zipties, but then think better of it with Milton keeping a close eye on you.";
@@ -1319,34 +1343,46 @@ const world = {
 			},
 			"escape": () => {return world.miltons_office.commands["escape from zipties"]();},
 			"get pair of scissors": () => {
-				world.miltons_office.milton_return("scissors");
+				let milton_returned = world.miltons_office.milton_return("scissors");
 				if (world.miltons_office.bound) {
 					return "you can't do that, you're tied up!";
 				}
 				if (!world.miltons_office.alone) {
 					return "you can't do that, Milton's watching you like a hawk!";
 				}
-				return get_item("pair of scissors");
+				if (milton_returned) {
+					console.log(milton_returned);
+					world.miltons_office.alone = false;
+				}
+				return get_item("pair of scissors", "", milton_returned);
 			},
 			"get scissors": () => {return world.miltons_office.commands["get pair of scissors"]();},
 			"get incident report": () => {
-				world.miltons_office.milton_return("report");
+				let milton_returned = world.miltons_office.milton_return("report");
 				if (world.miltons_office.bound) {
-					return "you can't do that, you're tied up!";
+					return "You can't do that, you're tied up!";
 				}
 				if (!world.miltons_office.alone) {
-					return "you can't do that, Milton's watching you like a hawk!";
+					return "You can't do that, Milton's watching you like a hawk!";
 				}
-				return get_item("incident report");
+				if (milton_returned) {
+					console.log(milton_returned);
+					world.miltons_office.alone = false;
+				}
+				return get_item("incident report", "", milton_returned);
 			},
 			"get report": () => {return world.miltons_office.commands["get incident report"]()},
 			"exit office": () => {
-				world.miltons_office.milton_return("leaving");
+				let milton_returned = world.miltons_office.milton_return("leaving");
 				if (world.miltons_office.bound) {
 					return "You can't do that, you're tied up!";
 				}
 				if (world.miltons_office.locked) {
 					return "You're free from the zipties, but the door is locked! your trapped in Milton's office. "
+				}
+				if (milton_returned) {
+					console.log(milton_returned);
+					world.miltons_office.alone = false;
 				}
 				return "Successful escape! change player location and proceed from there!"
 			},
@@ -1382,7 +1418,7 @@ const world = {
 			},
 			"apologize": () => {return world.miltons_office.commands["suck up and apologize"]();},
 			"inspect desk": () => {
-				world.miltons_office.milton_return("inspecting desk");
+				let milton_returned = world.miltons_office.milton_return("inspecting desk");
 				if (world.miltons_office.bound) {return "You can see Milton's desk from the chair. There's a computer, some papers, scissors - regular office things. You cant get a close look though, being bound in your chair."};
 				if (!world.miltons_office.alone) {return "You can see Milton's desk, and he's seated in the chair behind it. There's a computer, some papers, scissors - regular office things - but you don't dare reveal that you've freed your hooves. You remain seated."};
 				let report_txt = "";
@@ -1400,6 +1436,7 @@ const world = {
 			}
 		}
 	},
+
 	sunrise_emp_hall: {
 		description: () => {return "You are in the employee hallway outside the hotel's managerial various offices. You see vending machines,  There are several doorways here labeled 'Security', 'Maintenence', and 'Accounting' respectively, and a set of double doors to the south at the end of the hall."},
 		commands: {
