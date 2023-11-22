@@ -1257,6 +1257,7 @@ const world = {
 		bound: true,
 		locked: true,
 		alone: false,
+		milton_alive: true,
 		set_desc: 0,
 		turns_alone: 0,
 		resp_opts: {sil: true, apo: true},
@@ -1306,6 +1307,8 @@ const world = {
 
 						player.inventory["master key"] = mobile_npc.prince.inventory["master key"];
 						delete mobile_npc.prince.inventory["master key"];
+						world.miltons_office.alone = true;
+						world.miltons_office.milton_alive = false;
 						return "In an act of sheer brutality, you swiftly and callously swing the point of the scissors up from behind your back and forcefully drive them into his ear, through his skull, and into his soft brain. He lets out a loud scream which quickly becomes a gurgle, his eyes roll in the back of his head as blood pours out of his ear, and his convulsing body falls to the floor. After a moment the noises and movement stop, and you remove the white key card from the side of Milton's lifeless body. You sigh softly as the weight of taking a man's life crashes down upon you, a single pearly tear rolls out of the corner of your eye and down your cheek. You mourn the violence this world demands for a moment longer, then sniffle lightly as you wipe the sorrow from your face, refocusing on your mission."
 					},
 					"stab milton": () => {
@@ -1373,18 +1376,23 @@ const world = {
 			},
 			"get report": () => {return world.miltons_office.commands["get incident report"]()},
 			"exit office": () => {
-				let milton_returned = world.miltons_office.milton_return("leaving");
+				let milton_returned = world.miltons_office.milton_return("trying to leave");
 				if (world.miltons_office.bound) {
-					return "You can't do that, you're tied up!";
+					if (milton_returned) {
+						console.log(milton_returned);
+						world.miltons_office.alone = false;
+					}
+					return `You can't do that, you're tied up! ${"<BR><BR>" + milton_returned}`;
 				}
-				if (world.miltons_office.locked) {
-					return "You're free from the zipties, but the door is locked! your trapped in Milton's office. "
+				if (world.miltons_office.alone && world.miltons_office.locked && world.miltons_office.milton_alive) {
+					if (milton_returned) {
+						console.log(milton_returned);
+						world.miltons_office.alone = false;
+					}
+					return `You're free from the zipties, but the door is locked! your trapped in Milton's office. ${"<BR><BR>" + milton_returned}`
 				}
-				if (milton_returned) {
-					console.log(milton_returned);
-					world.miltons_office.alone = false;
-				}
-				return "Successful escape! change player location and proceed from there!"
+				
+				return "Successful escape! change player location and proceed from there!";
 			},
 			"leave office": () => {return world.miltons_office.commands["exit office"]();},
 			"respond aggressively": () => {
@@ -1541,6 +1549,9 @@ const player = {
 			commands: {
 				"throw horse shoes": () => {
 					return "You take off your horse shoes and throw them. They sail through the air and land a short distance from you, where you look at them for a moment. On further consideration, you decide you won't make it far without them, so you retrieve them and replace them on your hooves."
+				},
+				"throw horseshoes": () => {
+					return player.inventory["set of horse shoes"].commands["throw horse shoes"]();
 				}
 			}
 		}
