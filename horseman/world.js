@@ -1262,10 +1262,9 @@ const world = {
 		turns_alone: 0,
 		resp_opts: {sil: true, apo: true},
 		milton_return: (action) => {
-			//you are here
 			if (world.miltons_office.alone) {
 				console.log('youre still alone')
-				if (world.miltons_office.turns_alone == 3) {
+				if (world.miltons_office.turns_alone >= 3) {
 					console.log('miltons back')
 					let scissors_txt;
 					if (player.inventory["pair of scissors"]) {
@@ -1276,6 +1275,12 @@ const world = {
 					//world.miltons_office.alone = false;
 					//needs to switch at the end of calling function, not here. otherwise it screws up the output. 
 					//can check for world.miltons_office.turns_alone > 3
+					if (world.miltons_office.bound) {
+						world.miltons_office.set_desc = 8;
+						return `Suddenly, you hear the sound of footsteps outside the door, and someone manipulating the lock on the other side of the door. A quiet panic overtakes you as the door begins to open. Milton returns through the doorway, a briefcase in one hand and a sadistic looking grin on his face. 'Alright then mate, let's see if we can get some answers...' he begins. You're stuck in the chair, and there's nothing you can do as Milton begins to carve into your horseflesh with various implements. You curse at him through hideous screams, and slowly, the life fades from your body.<BR><BR> You have died and your adventure has ended. Thanks for playing! Press 'Ctrl + R' to restart.`;
+					} else {
+						world.miltons_office.set_desc = 6;
+					};
 					return `Just as you finish ${action}, you hear the sound of footsteps outside the door, and someone manipulating the lock on the other side of the door. You dash back to the chair and pretend to be bound again, just as the door begins to open. Milton returns through the doorway, a briefcase in one hand and a sadistic looking grin on his face. 'Alright then mate, let's see if we can get some answers...' he begins. ${scissors_txt}`;
 				};
 				world.miltons_office.turns_alone += 1;
@@ -1284,11 +1289,17 @@ const world = {
 		},
 		description: () => {
 			switch (world.miltons_office.set_desc) {
+				//default - bound, not alone, scissors and report present - no responses given yet
 				case 0: return "You come to under the greenish white glow of an office flourescent tube. Your hooves are bound with zip ties behind the office chair that you're seated in. There's a computer with a blank screen on the desk, a card reader, a coffee mug full of pens and pencils, scissors, tape and other office supplies. Milton is at the desk, standing and faced away from you, writing hurriedly on a sheet of paper on his desk. He doesn't realize that you've come to. You notice the zip tie around your hooves is loose around your wrists. You think you might be able to wiggle out of it, but just as you think this Milton realizes you've awakened, and looks over at you with anger in his eyes. 'Right then mate, what we gonna do 'bout this then?' he mutters as he leans in toward you. <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent<BR> - suck up and apologize";
+				// bound, not alone, 
 				case 1: return "You are being held captive in Milton's office, your hooves bound with zip ties behind the office chair that you're seated in. Milton is standing watch over you, angered by your assault and further irritated by your inadaquate response to his questioning. 'You'll have to answer for your actions one way or another mate,' he presses you. <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent<BR> - suck up and apologize";
 				case 2: return "You are being held captive in Milton's office, your hooves bound with zip ties behind the office chair that you're seated in. Milton is standing watch over you, awaiting your response to his vague questioning. 'Let's hear it mate!' he exclaims at you. <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent<BR> - suck up and apologize";
 				case 3: return "You are being held captive in Milton's office, your hooves bound with zip ties behind the office chair that you're seated in. Milton has left you locked in the room alone, leaving in a hurried rage after your indignant response to his questioning. You notice a sharp, sturdy looking pair of scissors on Milton's desk across from you, but your hooves are still bound behind your chair. You hear the faint sound of footsteps and voices down the hall outside the door."
 				case 4: return "You are being held captive in Milton's office. Milton has left you locked in the room alone, and you have managed to escape from the zipties. There's a sharp looking pair of scissors on the desk across from you.";
+				case 5: return "You are being held captive in Milton's office. Milton has left you locked in the room alone, and you have managed to escape from the zipties.";
+				case 6: return "You are being held captive in Milton's office. Milton has returned to finish interrogating you, but you have managed to escape from the zipties.";
+				case 7: return "You are in Milton's office. You've coldly murdered Mr. Milton, his body lays lifelessly in a pool of blood on the floor. You've taken his master key, and are able to unlock the door into the hallway.";
+				case 8: return "You are being held captive in Milton's office. Milton has returned to finish interrogating you, and you're bound in a chair with zipties.";
 			}
 			
 		},
@@ -1305,10 +1316,11 @@ const world = {
 							return "Milton hasn't returned, you're all alone in his office.";
 						}
 
-						player.inventory["master key"] = mobile_npc.prince.inventory["master key"];
-						delete mobile_npc.prince.inventory["master key"];
+						player.inventory["master key"] = mobile_npc.milton.inventory["master key"];
+						delete mobile_npc.milton.inventory["master key"];
 						world.miltons_office.alone = true;
 						world.miltons_office.milton_alive = false;
+						world.miltons_office.set_desc = 7;
 						return "In an act of sheer brutality, you swiftly and callously swing the point of the scissors up from behind your back and forcefully drive them into his ear, through his skull, and into his soft brain. He lets out a loud scream which quickly becomes a gurgle, his eyes roll in the back of his head as blood pours out of his ear, and his convulsing body falls to the floor. After a moment the noises and movement stop, and you remove the white key card from the side of Milton's lifeless body. You sigh softly as the weight of taking a man's life crashes down upon you, a single pearly tear rolls out of the corner of your eye and down your cheek. You mourn the violence this world demands for a moment longer, then sniffle lightly as you wipe the sorrow from your face, refocusing on your mission."
 					},
 					"stab milton": () => {
@@ -1324,7 +1336,7 @@ const world = {
 		commands: {
 			"escape from zipties": () => {
 				let milton_returned = world.miltons_office.milton_return("escaping");
-				
+				// if bound and alone
 				if (world.miltons_office.bound && world.miltons_office.alone) {
 					world.miltons_office.bound = false;
 					world.miltons_office.set_desc = 4;
@@ -1333,12 +1345,14 @@ const world = {
 						world.miltons_office.alone = false;
 					}
 					return `With a little effort, you're able to slip your hooves out of the zipties. You remain seated with your hooves behind your back, but you are free. You hear voices and footsteps approaching outside the office door. They stop for a moment outside and you hear Milton's voice coming from beyond the door, 'He's just inside here. Strangest thing I've ever seen - he's a man, but he's also a horse. Right assaulted me too, he did.' They continue past the door and the footsteps fade to silence. ${"<BR><BR>" + milton_returned}`;
+				// if unbound and alone
 				} else if (!world.miltons_office.bound && world.miltons_office.alone) {
 					if (milton_returned) {
 						console.log(milton_returned);
 						world.miltons_office.alone = false;
 					}
 					return `Your hooves are already unbound.${"<BR><BR>" + milton_returned}`;
+				// if not alone
 				} else {
 					world.miltons_office.set_desc = 2;
 					return "You consider escaping from the zipties, but then think better of it with Milton keeping a close eye on you.";
@@ -1346,10 +1360,12 @@ const world = {
 			},
 			"escape": () => {return world.miltons_office.commands["escape from zipties"]();},
 			"get pair of scissors": () => {
-				let milton_returned = world.miltons_office.milton_return("scissors");
+				let milton_returned = world.miltons_office.milton_return("getting the scissors");
+				// bound
 				if (world.miltons_office.bound) {
 					return "you can't do that, you're tied up!";
 				}
+				// not alone
 				if (!world.miltons_office.alone) {
 					return "you can't do that, Milton's watching you like a hawk!";
 				}
@@ -1357,14 +1373,18 @@ const world = {
 					console.log(milton_returned);
 					world.miltons_office.alone = false;
 				}
+				// not bound, alone
+				world.miltons_office.set_desc = 5;
 				return get_item("pair of scissors", "", milton_returned);
 			},
 			"get scissors": () => {return world.miltons_office.commands["get pair of scissors"]();},
 			"get incident report": () => {
-				let milton_returned = world.miltons_office.milton_return("report");
+				let milton_returned = world.miltons_office.milton_return("getting the report");
+				// bound
 				if (world.miltons_office.bound) {
 					return "You can't do that, you're tied up!";
 				}
+				// not alone
 				if (!world.miltons_office.alone) {
 					return "You can't do that, Milton's watching you like a hawk!";
 				}
@@ -1372,11 +1392,14 @@ const world = {
 					console.log(milton_returned);
 					world.miltons_office.alone = false;
 				}
+				// not bound, alone
+
 				return get_item("incident report", "", milton_returned);
 			},
 			"get report": () => {return world.miltons_office.commands["get incident report"]()},
 			"exit office": () => {
 				let milton_returned = world.miltons_office.milton_return("trying to leave");
+				// bound
 				if (world.miltons_office.bound) {
 					if (milton_returned) {
 						console.log(milton_returned);
@@ -1384,6 +1407,7 @@ const world = {
 					}
 					return `You can't do that, you're tied up! ${"<BR><BR>" + milton_returned}`;
 				}
+				// alone, locked in, milton not dead
 				if (world.miltons_office.alone && world.miltons_office.locked && world.miltons_office.milton_alive) {
 					if (milton_returned) {
 						console.log(milton_returned);
@@ -1395,7 +1419,15 @@ const world = {
 				return "Successful escape! change player location and proceed from there!";
 			},
 			"leave office": () => {return world.miltons_office.commands["exit office"]();},
+			"exit": () => {return world.miltons_office.commands["exit office"]();},
+			"leave": () => {return world.miltons_office.commands["exit office"]();},
+			"exit room": () => {return world.miltons_office.commands["exit office"]();},
+			"leave room": () => {return world.miltons_office.commands["exit office"]();},
 			"respond aggressively": () => {
+				if (!world.miltons_office.milton_alive) {
+					world.miltons_office.set_desc = 7;
+					return "Milton's lifeless body lies on the floor, covered in blood. You could speak to him, but he's already gone."
+				};
 				if (world.miltons_office.alone) {
 					return "Milton already left the room, there's no one here to hear you."
 				};
@@ -1404,6 +1436,10 @@ const world = {
 				return "You consider his question, knowing nothing you say will quell the anger inside him. Whatever consequenses you face will come regardless, so you hold fast to your conviction: 'STFU' you spit at him. 'I beg your pardon?' he asks with a firey rage burning in his eyes. 'Did I stutter?' you snap back without hesitation. Milton glares at you with a snarl on his face. 'You think you're being smart do you?' he says, right before he throws a heavy punch to the right side of your horseface. 'Ugh!' you exclaim involuntarily as the sting sears across your face. You feel a warm liquid begin to flow out of your nose and dribble across your lips. 'We'll see to this then!' he growls at you, before he turns abruptly and leaves the room. You hear the door lock behind him, and the sound of footsteps fade hurriedly away. You are alone, your face is bleeding, and you know you dont have much time before Milton returns.";
 			}, 
 			"remain silent": () => {
+				if (!world.miltons_office.milton_alive) {
+					world.miltons_office.set_desc = 7;
+					return "Milton's lifeless body lies on the floor, covered in blood. You could speak to him, but he's already gone."
+				};
 				if (world.miltons_office.alone) {
 					return "Milton already left the room, there's no one here for you to remain silent for."
 				};
@@ -1414,6 +1450,10 @@ const world = {
 				return `${base_resp} <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively`;
 			},
 			"suck up and apologize": () => {
+				if (!world.miltons_office.milton_alive) {
+					world.miltons_office.set_desc = 7;
+					return "Milton's lifeless body lies on the floor, covered in blood. You could speak to him, but he's already gone."
+				};
 				if (world.miltons_office.alone) {
 					return "Milton already left the room, there's no one here to hear you."
 				};
@@ -1426,7 +1466,7 @@ const world = {
 			},
 			"apologize": () => {return world.miltons_office.commands["suck up and apologize"]();},
 			"inspect desk": () => {
-				let milton_returned = world.miltons_office.milton_return("inspecting desk");
+				let milton_returned = world.miltons_office.milton_return("inspecting the desk");
 				if (world.miltons_office.bound) {return "You can see Milton's desk from the chair. There's a computer, some papers, scissors - regular office things. You cant get a close look though, being bound in your chair."};
 				if (!world.miltons_office.alone) {return "You can see Milton's desk, and he's seated in the chair behind it. There's a computer, some papers, scissors - regular office things - but you don't dare reveal that you've freed your hooves. You remain seated."};
 				let report_txt = "";
@@ -1440,7 +1480,10 @@ const world = {
 				if (world.miltons_office.items["incident report"]) {
 					report_txt = " A document titled 'Incident Report' lies near the keyboard. Under the title a smaller heading reads 'Incident Type: ASSAULT.' It appears to be a report of your tussle with Milton, it may be in your interest to make it disappear.";
 				};
-				return `You take a look over Milton's desk. Mostly it seems quite ordinary, regular office things are found on it. Pens and pencils, stapler, tape dispenser, paperclips and etc. ${scissors_txt}There's a computer, displaying a login page for user 'MPRINCE.' Some sticky notes with various messages and information scrawled on them are scattered around the monitor and keyboard. Nothing immediately appears to be a password. ${report_txt}`;
+				if (milton_returned) {
+					world.miltons_office.alone = false;
+				};
+				return `You take a look over Milton's desk. Mostly it seems quite ordinary, regular office things are found on it. Pens and pencils, stapler, tape dispenser, paperclips and etc. ${scissors_txt}There's a computer, displaying a login page for user 'MPRINCE.' Some sticky notes with various messages and information scrawled on them are scattered around the monitor and keyboard. Nothing immediately appears to be a password. ${report_txt} <BR><BR> ${milton_returned}`;
 			}
 		}
 	},
@@ -1502,7 +1545,7 @@ const mobile_npc = {
 		add_desc: () => {return "theres an elderly gentleman looking around awkwardly and mumbling to himself under his breath."},
 		inventory: {}
 	},
-	prince: {
+	milton: {
 		move_on: 100,
 		location: world.breezeway_north,
 		inventory: {
@@ -1513,18 +1556,18 @@ const mobile_npc = {
 		},
 		add_desc: () => {
 			let master = "";
-			if (mobile_npc.prince.inventory["master key"]){
+			if (mobile_npc.milton.inventory["master key"]){
 				master = " A white key card hangs off of his hip on a caribeaner attatched to his beltloop."
 			}
-			return `Milton, better known as 'Prince' the hotel security man, is here. He glances at you, smiles and says 'Why the long face, mate?' in his signiture british accent.${master}`;
+			return `Milton, also known as 'Prince' the hotel security man, is here. He glances at you, smiles and says 'Why the long face, mate?' in his signiture british accent.${master}`;
 		},
 		
 		npc_commands: {
 			"fight milton for key": () => {
 				let roll = Math.floor(Math.random() * 4) + 1;
 				if (roll > 3) {
-					player.inventory["master key"] = mobile_npc.prince.inventory["master key"];
-					delete mobile_npc.prince.inventory["master key"];
+					player.inventory["master key"] = mobile_npc.milton.inventory["master key"];
+					delete mobile_npc.milton.inventory["master key"];
 					return "Suddenly and without warning, you lunge at Milton from a horses arm length, blindsiding the unsuspecting security man right in the jaw with your hardened hoof. Incredibly, this does not knock him unconscious, though blood immediately begins pouring from his mouth and nose. 'Bloody F--kin Hell mate!' he spits as he squares up to you. The two of you spar for several minutes, each landing a number of solid blows. Milton fights galliantly, but alas, the initial sucker-punch seems to have set the tone of the fight and after landing another hoof in Milton's swelling and bloodied face, he falls unconscious to the ground. You bend down and remove the key card from his hip, and let out low 'neigh' as you observe the bloodied prize held by your hoof. You look down at Milton's defeated body, and for a brief moment you are filled with compassion and remorse, your soul bitterly lamenting the violence this world demands. The feeling passes as quickly as it came, and your mind returns to your mission." 
 				} else {
 					player.location = world.miltons_office;
@@ -1532,9 +1575,9 @@ const mobile_npc = {
 				}
 				
 			},
-			"fight prince for key": () => {return mobile_npc.prince.npc_commands["fight milton for key"]()},
-			"fight milton": () => {return mobile_npc.prince.npc_commands["fight milton for key"]()},
-			"fight prince": () => {return mobile_npc.prince.npc_commands["fight milton for key"]()}
+			"fight prince for key": () => {return mobile_npc.milton.npc_commands["fight milton for key"]()},
+			"fight milton": () => {return mobile_npc.milton.npc_commands["fight milton for key"]()},
+			"fight prince": () => {return mobile_npc.milton.npc_commands["fight milton for key"]()}
 		}
 	}
 };
