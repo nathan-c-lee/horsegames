@@ -1309,6 +1309,11 @@ const world = {
 				commands: {
 					"stab milton with scissors": () => {
 						if (world.miltons_office.bound) {
+							// you are here
+							let milton_returned = world.miltons_office.milton_return();
+							if (milton_returned) {
+								return milton_returned;
+							};
 							return "you can't do that, you're tied up!";
 						}
 						
