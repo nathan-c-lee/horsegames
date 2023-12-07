@@ -36,6 +36,10 @@ text_window.append(initial_p);
 function process_input(in_val) {
 	const terminal_output = document.createElement("p");
 
+	if(player.dead) {
+		terminal_output.innerHTML = "You have died, and your adventure has ended. Thanks for playing. <BR><BR> Press 'Ctrl + R' to restart the game.";
+	}
+
 	for (let command in player.commands) {
 		if (command === in_val) {
 			move_count += 1;

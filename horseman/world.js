@@ -1260,7 +1260,7 @@ const world = {
 		milton_alive: true,
 		set_desc: 0,
 		turns_alone: 0,
-		resp_opts: {sil: true, apo: true},
+		resp_opts: {sil: true, apo: true, agg: true},
 		milton_return: (action) => {
 			if (world.miltons_office.alone) {
 				console.log('youre still alone')
@@ -1277,7 +1277,7 @@ const world = {
 					//can check for world.miltons_office.turns_alone > 3
 					if (world.miltons_office.bound) {
 						world.miltons_office.set_desc = 8;
-						return `Suddenly, you hear the sound of footsteps outside the door, and someone manipulating the lock on the other side of the door. A quiet panic overtakes you as the door begins to open. Milton returns through the doorway, a briefcase in one hand and a sadistic looking grin on his face. 'Alright then mate, let's see if we can get some answers...' he begins. You're stuck in the chair, and there's nothing you can do as Milton begins to carve into your horseflesh with various implements. You curse at him through hideous screams, and slowly, the life fades from your body.<BR><BR> You have died and your adventure has ended. Thanks for playing! Press 'Ctrl + R' to restart.`;
+						return `Suddenly, you hear the sound of footsteps outside the door, and someone manipulating the lock on the other side of the door. A quiet panic overtakes you as the door begins to open. Milton returns through the doorway, a briefcase in one hand and a sadistic looking grin on his face. 'Look mate, it really didn't have to be this way...' he begins. You're stuck in the chair, and there's nothing you can do as Milton begins to carve into your horseflesh with various implements. You curse at him through hideous screams, and slowly, the life fades from your body.<BR><BR> You have died and your adventure has ended. Thanks for playing! Press 'Ctrl + R' to restart.`;
 					} else {
 						world.miltons_office.set_desc = 6;
 					};
@@ -1312,6 +1312,7 @@ const world = {
 							// you are here
 							let milton_returned = world.miltons_office.milton_return();
 							if (milton_returned) {
+								world.miltons_office.alone = false;
 								return milton_returned;
 							};
 							return "you can't do that, you're tied up!";
@@ -1360,6 +1361,7 @@ const world = {
 				// if not alone
 				} else {
 					world.miltons_office.set_desc = 2;
+					world.miltons_office.alone = false;
 					return "You consider escaping from the zipties, but then think better of it with Milton keeping a close eye on you.";
 				}
 			},
@@ -1436,9 +1438,16 @@ const world = {
 				if (world.miltons_office.alone) {
 					return "Milton already left the room, there's no one here to hear you."
 				};
+				let resp;
+				if(world.miltons_office.resp_opts.agg) {
+					resp = "You consider his question, knowing nothing you say will quell the anger inside him. Whatever consequenses you face will come regardless, so you hold fast to your conviction: 'STFU' you spit at him. 'I beg your pardon?' he asks with a firey rage burning in his eyes. 'Did I stutter?' you snap back without hesitation. Milton glares at you with a snarl on his face. 'You think you're being smart do you?' he says, right before he throws a heavy punch to the right side of your horseface. 'Ugh!' you exclaim involuntarily as the sting sears across your face. You feel a warm liquid begin to flow out of your nose and dribble across your lips. 'We'll see to this then!' he growls at you, before he turns abruptly and leaves the room. You hear the door lock behind him, and the sound of footsteps fade hurriedly away. You are alone, your face is bleeding, and you know you dont have much time before Milton returns.";
+				} else {
+					resp = "You've already angered him beyond belief, and it hasn't helped you any. Probably best to keep your horsey mouth shut at this point.";
+				}
 				world.miltons_office.alone = true;
 				world.miltons_office.set_desc = 3;
-				return "You consider his question, knowing nothing you say will quell the anger inside him. Whatever consequenses you face will come regardless, so you hold fast to your conviction: 'STFU' you spit at him. 'I beg your pardon?' he asks with a firey rage burning in his eyes. 'Did I stutter?' you snap back without hesitation. Milton glares at you with a snarl on his face. 'You think you're being smart do you?' he says, right before he throws a heavy punch to the right side of your horseface. 'Ugh!' you exclaim involuntarily as the sting sears across your face. You feel a warm liquid begin to flow out of your nose and dribble across your lips. 'We'll see to this then!' he growls at you, before he turns abruptly and leaves the room. You hear the door lock behind him, and the sound of footsteps fade hurriedly away. You are alone, your face is bleeding, and you know you dont have much time before Milton returns.";
+				world.miltons_office.resp_opts.agg = false;
+				return resp;
 			}, 
 			"remain silent": () => {
 				if (!world.miltons_office.milton_alive) {
@@ -1448,7 +1457,12 @@ const world = {
 				if (world.miltons_office.alone) {
 					return "Milton already left the room, there's no one here for you to remain silent for."
 				};
-				let base_resp = "You hear his question, but you do not answer. You look up at him with your beady little horse eyes and tuck your horse lips into your mouth tightly, making it clear that you're taking the fifth. 'Alright then, you little shit,' he sneers at you. 'We'll just sit here till you feel like talking then!' he exclaims as he sits down and props his feet up high on his desk, making himself comfortable and glaring at you. 'We can hang out here all day, mate' he says to you, reclining in his office chair. He continues to await an adequate response.";
+				let base_resp;
+				if(world.miltons_office.resp_opts.sil) {
+					base_resp = "You hear his question, but you do not answer. You look up at him with your beady little horse eyes and tuck your horse lips into your mouth tightly, making it clear that you're taking the fifth. 'Alright then, you little shit,' he sneers at you. 'We'll just sit here till you feel like talking then!' he exclaims as he sits down and props his feet up high on his desk, making himself comfortable and glaring at you. 'We can hang out here all day, mate' he says to you, reclining in his office chair. He continues to await an adequate response.";
+				} else {
+					base_resp = "You already tried ignoring the problem, it wont go away on its own.";
+				}
 				world.miltons_office.set_desc = 1;
 				world.miltons_office.resp_opts.sil = false;
 				if (world.miltons_office.resp_opts.apo) {return `${base_resp} <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively <BR> - suck up and apologize.`};
@@ -1462,7 +1476,12 @@ const world = {
 				if (world.miltons_office.alone) {
 					return "Milton already left the room, there's no one here to hear you."
 				};
-				let base_resp = "You realize that you Milton is justifiably angry with you, and probably wants to beat the tar out of you. You're not sure what he's planning, but perhaps you can smooth things over a bit and talk him down. 'Listen,' you begin timidly, 'I'm sorry I struck you. I don't know what came over me.' <BR>An awkward, silent moment passes. Finally, Milton responds:<BR>'Oh you're sorry? You're sorry mate? Well sorry ain't gonna pay for the stitches they're gonna put in my face,' indicating his split lip. 'You're sorry as can be mate, but you'll have to do better than that.'<BR>Unfortunately, there doesn't seem to be any way to repair the damage you've done at this point. He continues to await an adequate response.";
+				let base_resp;
+				if(world.miltons_office.resp_opts.apo) {
+					base_resp = "You realize that you Milton is justifiably angry with you, and probably wants to beat the tar out of you. You're not sure what he's planning, but perhaps you can smooth things over a bit and talk him down. 'Listen,' you begin timidly, 'I'm sorry I struck you. I don't know what came over me.' <BR>An awkward, silent moment passes. Finally, Milton responds:<BR>'Oh you're sorry? You're sorry mate? Well sorry ain't gonna pay for the stitches they're gonna put in my face,' indicating his split lip. 'You're sorry as can be mate, but you'll have to do better than that.'<BR>Unfortunately, there doesn't seem to be any way to repair the damage you've done at this point. He continues to await an adequate response.";
+				} else {
+					base_resp = "You already tried to get on his good side, but its too late for that now.";
+				};
 				world.miltons_office.set_desc = 1;
 				world.miltons_office.resp_opts.apo = false;
 				if (world.miltons_office.resp_opts.sil) {return `${base_resp} <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively <BR> - remain silent.`};
@@ -1470,6 +1489,7 @@ const world = {
 				//return <BR><BR> RESPONSE OPTIONS:<BR> - respond aggressively<BR> - remain silent.";
 			},
 			"apologize": () => {return world.miltons_office.commands["suck up and apologize"]();},
+			"suck up": () => {return world.miltons_office.commands["suck up and apologize"]();},
 			"inspect desk": () => {
 				let milton_returned = world.miltons_office.milton_return("inspecting the desk");
 				if (world.miltons_office.bound) {return "You can see Milton's desk from the chair. There's a computer, some papers, scissors - regular office things. You cant get a close look though, being bound in your chair."};
@@ -1591,6 +1611,7 @@ const mobile_npc = {
 const player = {
 	//START LOCATION
 	location: world.miltons_office,
+	dead: false,
 	inventory: {
 		"set of horse shoes": {
 			description: "a set of 4 horseshoes, which you wear on your hooves",
