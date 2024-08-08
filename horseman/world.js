@@ -1423,7 +1423,8 @@ const world = {
 					return `You're free from the zipties, but the door is locked! your trapped in Milton's office. ${"<BR><BR>" + milton_returned}`
 				}
 				
-				return "Successful escape! change player location and proceed from there!";
+				player.location = world.sunrise_emp_hall;
+				return player.location.description();
 			},
 			"leave office": () => {return world.miltons_office.commands["exit office"]();},
 			"exit": () => {return world.miltons_office.commands["exit office"]();},
@@ -1610,7 +1611,7 @@ const mobile_npc = {
 // player object (inventory, default and debug commands )
 const player = {
 	//START LOCATION
-	location: world.miltons_office,
+	location: world.elev_24_landing,
 	dead: false,
 	inventory: {
 		"set of horse shoes": {
