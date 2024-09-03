@@ -1517,11 +1517,13 @@ const world = {
 	sunrise_emp_hall: {
 		description: () => {return "You are in the employee hallway outside the hotel's managerial various offices. You see vending machines, There are several doorways here labeled 'Security', 'Maintenence', and 'Accounting' respectively, and a set of double doors to the south at the end of the hall."},
 		commands: {
+			"enter security office": () => {player.location = world.miltons_office; return player.location.description()},
+			"sec office": () => {return world.sunrise_emp_hall.commands["enter security office"]()},
 		}
 	},
 
-	/*live_oak: {
-		!!!!!!!!fix this!!!!!!!!!!!!
+	live_oak: {
+		/*!!!!!!!!fix this!!!!!!!!!!!!
 		description: () => {return "GAME UNDER CONSTRUCTION - live oak"},
 		commands: {
 			"go north": () => {player.location = world.breezeway_south; return player.location.description()},
@@ -1542,7 +1544,8 @@ const world = {
 				}
 			}
 		}
-	},
+	*/}
+	/*
 	pool_gate_path: {},
 	hive_circle: {},
 	valet_garage: {},
@@ -1611,7 +1614,7 @@ const mobile_npc = {
 // player object (inventory, default and debug commands )
 const player = {
 	//START LOCATION
-	location: world.south_pool,
+	location: world.sunrise_emp_hall,
 	dead: false,
 	inventory: {
 		"set of horse shoes": {
