@@ -1300,6 +1300,14 @@ const world = {
 				case 6: return "You are being held captive in Milton's office. Milton has returned to finish interrogating you, but you have managed to escape from the zipties.";
 				case 7: return "You are in Milton's office. You've coldly murdered Mr. Milton, his body lays lifelessly in a pool of blood on the floor. You've taken his master key, and are able to unlock the door into the hallway.";
 				case 8: return "You are being held captive in Milton's office. Milton has returned to finish interrogating you, and you're bound in a chair with zipties.";
+				case 9: 
+					let isreport; 
+					if (player.inventory["incident report"]) {
+						isreport = ""
+					} else {
+						isreport = "There is an official looking report detailing your initial assault on Mr. Milton lying on the desk. You might want to make it disappear."
+					};
+					return `You are in Milton's office. Milton's lifeless body lies in a pool of blood on the floor, where you left it after murdering him earlier. The office chair where you had been bound is next to the desk, and various office items are on it next to the computer. ${isreport}`;
 			}
 			
 		},
@@ -1423,6 +1431,7 @@ const world = {
 					return `You're free from the zipties, but the door is locked! your trapped in Milton's office. ${"<BR><BR>" + milton_returned}`
 				}
 				
+				world.miltons_office.set_desc = 9;
 				player.location = world.sunrise_emp_hall;
 				return player.location.description();
 			},
@@ -1544,7 +1553,7 @@ const world = {
 				}
 			}
 		}
-	*/}
+	*/},
 	/*
 	pool_gate_path: {},
 	hive_circle: {},
@@ -1614,7 +1623,7 @@ const mobile_npc = {
 // player object (inventory, default and debug commands )
 const player = {
 	//START LOCATION
-	location: world.sunrise_emp_hall,
+	location: world.miltons_office,
 	dead: false,
 	inventory: {
 		"set of horse shoes": {
