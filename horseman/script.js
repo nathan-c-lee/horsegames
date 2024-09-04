@@ -14,14 +14,13 @@ long-and-short of it being: All of this game and its similarity to anyone or any
 reality is either coincidental, or done in jest and in good sport. I hope it is enjoyed
 by all who play it.
 */
+import {mobile_npc, player} from "./world.js";
 
 const text_window = document.getElementById("text-window");
 const input = document.getElementById("input");
 const submit = document.getElementById("submit");
 
 let move_count = 0;
-
-import {mobile_npc, player} from "./world.js";
 
 const initial_p =  document.createElement("p");
 let npc_present = "";

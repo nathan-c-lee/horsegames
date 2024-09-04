@@ -1432,7 +1432,7 @@ const world = {
 				}
 				
 				world.miltons_office.set_desc = 9;
-				player.location = world.sunrise_emp_hall;
+				player.location = world.north_sunrise_emp_hall;
 				return player.location.description();
 			},
 			"leave office": () => {return world.miltons_office.commands["exit office"]();},
@@ -1523,12 +1523,63 @@ const world = {
 		}
 	},
 
-	sunrise_emp_hall: {
-		description: () => {return "You are in the employee hallway outside the hotel's managerial various offices. You see vending machines, There are several doorways here labeled 'Security', 'Maintenence', and 'Accounting' respectively, and a set of double doors to the south at the end of the hall."},
+	north_sunrise_emp_hall: {
+		description: () => {return "You are in the north section of the employee hallway outside the hotel's various managerial offices. You see vending machines here, and bulletin boards with information posted on them. Milton's office, to your north, is labeled 'Security'. The hallway continues east and west. To the east, several doorways are visible. To the west, another single door, and a set of double doors."},
 		commands: {
 			"enter security office": () => {player.location = world.miltons_office; return player.location.description()},
-			"sec office": () => {return world.sunrise_emp_hall.commands["enter security office"]()},
+			"sec office": () => {return world.north_sunrise_emp_hall.commands["enter security office"]()},
+			"go north": () => {return world.north_sunrise_emp_hall.commands["enter security office"]()},
+			"n": () => {return world.north_sunrise_emp_hall.commands["enter security office"]()},
+			"go east": () => {player.location = world.east_sunrise_emp_hall; return player.location.description()},
+			"e": () => {return world.north_sunrise_emp_hall.commands["go east"]()},
+			"go west": () => {player.location = world.west_sunrise_emp_hall; return player.location.description()},
+			"w": () => {return world.north_sunrise_emp_hall.commands["go west"]()},
 		}
+	},
+
+	east_sunrise_emp_hall: {
+		description: () => {return "You are in the east section of the employee hallway outside the hotel's various managerial offices."},
+		commands: {
+			"enter maintenance office": () => {player.location = world.maintenance_office; return player.location.description()},
+			"maint office": () => {return world.east_sunrise_emp_hall.commands["enter maintenance office"]()},
+			"go north": () => {return world.east_sunrise_emp_hall.commands["enter maintenance office"]()},
+			"n": () => {return world.east_sunrise_emp_hall.commands["enter maintenance office"]()},
+			"enter accounting office": () => {player.location = world.accounting_office; return player.location.description()},
+			"go east": () => {return world.east_sunrise_emp_hall.commands["enter accounting office"]()},
+			"e": () => {return world.east_sunrise_emp_hall.commands["enter accounting office"]()},
+			"go west": () => {player.location = world.north_sunrise_emp_hall; return player.location.description()},
+			"w": () => {return world.east_sunrise_emp_hall.commands["go west"]()},
+			//"go south": () => {return world.east_sunrise_emp_hall.commands[]()},
+			//"s": () => {return world.east_sunrise_emp_hall.commands[]()},
+
+		}
+	},
+
+	west_sunrise_emp_hall: {
+		description: () => {return "You are in the west section of the employee hallway outside the hotel's various managerial offices."},
+		commands: {
+			"go north": () => {player.location = world.south_under_breezway; return player.location.description()},
+			"n": () => {return world.west_sunrise_emp_hall.commands["go north"]()},
+			//"go east": () => {return world.west_sunrise_emp_hall.commands[]()},
+			//"e": () => {return world.west_sunrise_emp_hall.commands[]()},
+			//"go west": () => {return world.west_sunrise_emp_hall.commands[]()},
+			//"w": () => {return world.west_sunrise_emp_hall.commands[]()},
+			//"go south": () => {return world.west_sunrise_emp_hall.commands[]()},
+			//"s": () => {return world.west_sunrise_emp_hall.commands[]()},
+
+		}
+	},
+
+	maintenance_office: {
+		description: () => {return "You are in the maintenance office"},
+	},
+	
+	accounting_office: {
+		description: () => {return "You are in the accounting office"},
+	},
+
+	south_under_breezway: {
+		description: () => {return "You are in the employee hallway, under the south end of the breezeway."}
 	},
 
 	live_oak: {
@@ -1623,7 +1674,7 @@ const mobile_npc = {
 // player object (inventory, default and debug commands )
 const player = {
 	//START LOCATION
-	location: world.miltons_office,
+	location: world.north_sunrise_emp_hall,
 	dead: false,
 	inventory: {
 		"set of horse shoes": {
