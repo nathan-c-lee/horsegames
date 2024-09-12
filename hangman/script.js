@@ -68,7 +68,7 @@ function game(indexer) {
 
 	let lchar = 65;
 	for (i = 0; i < 26; i++) {
-		this_l = String.fromCharCode(lchar + i);
+		let this_l = String.fromCharCode(lchar + i);
 		let l_box = document.createElement("div");
 		let l = document.createElement("h2");
 		l_box.style.display = "inline-block";
