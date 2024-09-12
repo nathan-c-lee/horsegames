@@ -1674,7 +1674,7 @@ const mobile_npc = {
 // player object (inventory, default and debug commands )
 const player = {
 	//START LOCATION
-	location: world.north_sunrise_emp_hall,
+	location: world.west_pool,
 	dead: false,
 	inventory: {
 		"set of horse shoes": {
