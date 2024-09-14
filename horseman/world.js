@@ -1265,7 +1265,7 @@ const world = {
 			if (world.miltons_office.alone && world.miltons_office.milton_alive) {
 				console.log('youre still alone')
 				if (world.miltons_office.turns_alone >= 3) {
-					console.log('miltons back')
+					console.log('miltons back');
 					let scissors_txt;
 					if (player.inventory["pair of scissors"]) {
 						scissors_txt = "You grip the pair of scissors from Milton's desk tightly with your hoof. It looks like you may have to defend yourself.";
@@ -1277,6 +1277,7 @@ const world = {
 					//can check for world.miltons_office.turns_alone > 3
 					if (world.miltons_office.bound) {
 						world.miltons_office.set_desc = 8;
+						player.dead	= true;
 						return `Suddenly, you hear the sound of footsteps outside the door, and someone manipulating the lock on the other side of the door. A quiet panic overtakes you as the door begins to open. Milton returns through the doorway, a briefcase in one hand and a sadistic looking grin on his face. 'Look mate, it really didn't have to be this way...' he begins. You're stuck in the chair, and there's nothing you can do as Milton begins to carve into your horseflesh with various implements. You curse at him through hideous screams, and slowly, the life fades from your body.<BR><BR> You have died and your adventure has ended. Thanks for playing! Press 'Ctrl + R' to restart.`;
 					} else {
 						world.miltons_office.set_desc = 6;
@@ -1284,7 +1285,9 @@ const world = {
 					return `Just as you finish ${action}, you hear the sound of footsteps outside the door, and someone manipulating the lock on the other side of the door. You dash back to the chair and pretend to be bound again, just as the door begins to open. Milton returns through the doorway, a briefcase in one hand and a sadistic looking grin on his face. 'Alright then mate, let's see if we can get some answers...' he begins. ${scissors_txt}`;
 				};
 				world.miltons_office.turns_alone += 1;
-			}
+			} else if (world.miltons_office.milton_alive == false) {
+				return "";
+			};
 			return "";
 		},
 		description: () => {
@@ -1299,7 +1302,9 @@ const world = {
 				case 5: return "You are being held captive in Milton's office. Milton has left you locked in the room alone, and you have managed to escape from the zipties.";
 				case 6: return "You are being held captive in Milton's office. Milton has returned to finish interrogating you, but you have managed to escape from the zipties.";
 				case 7: return "You are in Milton's office. You've coldly murdered Mr. Milton, his body lays lifelessly in a pool of blood on the floor. You've taken his master key, and are able to unlock the door into the hallway.";
-				case 8: return "You are being held captive in Milton's office. Milton has returned to finish interrogating you, and you're bound in a chair with zipties.";
+				case 8:
+					player.dead = true;
+					return "You are being held captive in Milton's office. Milton has returned carrying a briefcase, and you're bound in a chair with zipties. Milton sets the briefcase on his desk, and then picks up the report on his desk and throws it away. 'Mate, you picked a bad day to assault me. I would normally just file a report and hand you over to the police, but today, I've finally snapped. I don't get paid enough to deal with this nonsense, and at this point I really just want you to eat shit.' He slides a pair of nitrile gloves on his hands as he says this, and then pulls a bag from his briefcase. He reaches into the bag, and brings forth from it a handful of stinking brown feces, which he procedes to sling onto your face. 'Open wide, you stupid git!' he says, then shoves another handful of the putrid mush into your mouth, as much as he is able. You protest of course, but you are bound in the chair. Milton has the upper hand and is filled with rageful, malicious intent. He continues to humiliate you by covering you with the contents of the bag, and despite your braying and pleading, after a few moments, you are complete covered in it. It's in your mouth, your eyes, your nose, and all over you. The smell is horrendous, and as much as you spit and beg, Milton cannot be swayed. He begins to laugh maniacally as he continues, swearing and wishing every imaginable curse upon you until finally he says, 'Alright then mate, now comes the end.' He grabs the office scissors from his desk, and then proceeds to stab you repeatedly, laughing insanely as he does. You protest and scream horse-screams, but Milton won't stop, your body radiating pain from each puncture as Milton stabs again, and again, and again. You grow weak as blood pours out of you, your vision begins to fade, and your hearing becomes muffled. The awful olfactory sensation of shit seems to have evaporated completely, you can't smell or taste anything now. The pain filling your body subsides, and suddenly you feel as if you are floating, like youre wrapped in a soft blanket on top of a marshmallow cloud. You cant see Milton any more, or the office, just light. Warm, beautiful amber colored light is all there is, as you float, forgetting everything. It's all over now.<BR><BR>You have died. Press CTRL + R to restart your adventure.";
 				case 9: 
 					let isreport; 
 					if (player.inventory["incident report"]) {
@@ -1316,8 +1321,12 @@ const world = {
 				description: "a sharp pair of office scissors",
 				commands: {
 					"stab milton with scissors": () => {
+						// you are here
+						if (world.miltons_office.milton_alive == false) {
+							return "you've already stabbed Mr. Milton and murdered him in cold blood, his body now lies dead in his office. There's no reason to do it again. "
+						}
+
 						if (world.miltons_office.bound) {
-							// you are here
 							let milton_returned = world.miltons_office.milton_return();
 							if (milton_returned) {
 								world.miltons_office.alone = false;
@@ -1344,7 +1353,11 @@ const world = {
 			},
 			"incident report": {
 				description: "an official looking document detailing how you assaulted Milton",
-				commands: {}
+				commands: {
+					"read report": () => {
+						return "You take a moment to look over the report detailing your assault on Milton, the hotel security man. (now the game dev needs to take a moment to write out the actual report in detail and include this object in the plot of the game somehow.)"
+					}
+				}
 			}
 		},
 		commands: {
@@ -1378,7 +1391,7 @@ const world = {
 				let milton_returned = world.miltons_office.milton_return("getting the scissors");
 				// bound
 				if (world.miltons_office.bound) {
-					return "you can't do that, you're tied up!";
+					return `you can't do that, you're tied up! <BR><BR> ${milton_returned}`;
 				}
 				// not alone
 				if (!world.miltons_office.alone) {
@@ -1394,7 +1407,6 @@ const world = {
 			},
 			"get scissors": () => {return world.miltons_office.commands["get pair of scissors"]();},
 			"get incident report": () => {
-				let milton_returned = world.miltons_office.milton_return("getting the report");
 				// bound
 				if (world.miltons_office.bound) {
 					return "You can't do that, you're tied up!";
@@ -1403,6 +1415,8 @@ const world = {
 				if (!world.miltons_office.alone) {
 					return "You can't do that, Milton's watching you like a hawk!";
 				}
+				let milton_returned = world.miltons_office.milton_return("getting the report");
+				
 				if (milton_returned) {
 					console.log(milton_returned);
 					world.miltons_office.alone = false;
@@ -1674,7 +1688,7 @@ const mobile_npc = {
 // player object (inventory, default and debug commands )
 const player = {
 	//START LOCATION
-	location: world.west_pool,
+	location: world.miltons_office,
 	dead: false,
 	inventory: {
 		"set of horse shoes": {
