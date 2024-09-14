@@ -1262,7 +1262,7 @@ const world = {
 		turns_alone: 0,
 		resp_opts: {sil: true, apo: true, agg: true},
 		milton_return: (action) => {
-			if (world.miltons_office.alone) {
+			if (world.miltons_office.alone && world.miltons_office.milton_alive) {
 				console.log('youre still alone')
 				if (world.miltons_office.turns_alone >= 3) {
 					console.log('miltons back')
