@@ -1262,7 +1262,7 @@ const world = {
 		turns_alone: 0,
 		resp_opts: {sil: true, apo: true, agg: true},
 		milton_return: (action) => {
-			if (world.miltons_office.alone && world.miltons_office.milton_alive) {
+			if (world.miltons_office.alone && world.miltons_office.milton_alive && !world.miltons_office.bound) {
 				console.log('youre still alone')
 				if (world.miltons_office.turns_alone >= 3) {
 					console.log('miltons back');
@@ -1287,6 +1287,8 @@ const world = {
 				world.miltons_office.turns_alone += 1;
 			} else if (world.miltons_office.milton_alive == false) {
 				return "";
+			} else if (world.maintenance_office.bound) {
+				return "You've already freed yourself from the zipties."
 			};
 			return "";
 		},
@@ -1436,14 +1438,18 @@ const world = {
 					}
 					return `You can't do that, you're tied up! ${"<BR><BR>" + milton_returned}`;
 				}
-				// alone, locked in, milton not dead
+				// alone, locked in
 				if (world.miltons_office.alone && world.miltons_office.locked && world.miltons_office.milton_alive) {
 					if (milton_returned) {
 						console.log(milton_returned);
 						world.miltons_office.alone = false;
 					}
-					return `You're free from the zipties, but the door is locked! your trapped in Milton's office. ${"<BR><BR>" + milton_returned}`
-				}
+					return `You're free from the zipties, but the door is locked! You're trapped in Milton's office. ${"<BR><BR>" + milton_returned}`;
+				};
+
+				if (world.miltons_office.milton_alive) {
+					return "You think about dashing for the exit, but then think better of it with Milton standing over you. The door is probably locked anyway. You notice a key card hanging from Milton's beltloop.";
+				};
 				
 				world.miltons_office.set_desc = 9;
 				player.location = world.north_sunrise_emp_hall;
