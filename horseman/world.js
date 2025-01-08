@@ -1546,7 +1546,13 @@ const world = {
 	north_sunrise_emp_hall: {
 		description: () => {return "You are in the north section of the employee hallway outside the hotel's various managerial offices. You see vending machines here, and bulletin boards with information posted on them. Milton's office, to your north, is labeled 'Security'. The hallway continues east and west. To the east, several doorways are visible. To the west, another single door, and a set of double doors."},
 		commands: {
-			"enter security office": () => {player.location = world.miltons_office; return player.location.description()},
+			"enter security office": () => {
+				if ("master key" in player.inventory) {
+					player.location = world.miltons_office; return player.location.description();
+				} else {
+					return "The door is locked, and you don't have a key.";
+				}
+			},	
 			"sec office": () => {return world.north_sunrise_emp_hall.commands["enter security office"]()},
 			"go north": () => {return world.north_sunrise_emp_hall.commands["enter security office"]()},
 			"n": () => {return world.north_sunrise_emp_hall.commands["enter security office"]()},
@@ -1560,7 +1566,13 @@ const world = {
 	east_sunrise_emp_hall: {
 		description: () => {return "You are in the east section of the employee hallway outside the hotel's various managerial offices."},
 		commands: {
-			"enter maintenance office": () => {player.location = world.maintenance_office; return player.location.description()},
+			"enter maintenance office": () => {
+				if ("master key" in player.inventory) {
+					player.location = world.maintenance_office; return player.location.description();
+				} else {
+					return "The door is locked, and you don't have a key.";
+				}
+			},
 			"maint office": () => {return world.east_sunrise_emp_hall.commands["enter maintenance office"]()},
 			"go north": () => {return world.east_sunrise_emp_hall.commands["enter maintenance office"]()},
 			"n": () => {return world.east_sunrise_emp_hall.commands["enter maintenance office"]()},
@@ -1580,8 +1592,8 @@ const world = {
 		commands: {
 			"go north": () => {player.location = world.south_under_breezway; return player.location.description()},
 			"n": () => {return world.west_sunrise_emp_hall.commands["go north"]()},
-			//"go east": () => {return world.west_sunrise_emp_hall.commands[]()},
-			//"e": () => {return world.west_sunrise_emp_hall.commands[]()},
+			"go east": () => {player.location = world.north_sunrise_emp_hall; return player.location.description()},
+			"e": () => {return world.west_sunrise_emp_hall.commands["go east"]()},
 			//"go west": () => {return world.west_sunrise_emp_hall.commands[]()},
 			//"w": () => {return world.west_sunrise_emp_hall.commands[]()},
 			//"go south": () => {return world.west_sunrise_emp_hall.commands[]()},
@@ -1599,7 +1611,11 @@ const world = {
 	},
 
 	south_under_breezway: {
-		description: () => {return "You are in the employee hallway, under the south end of the breezeway."}
+		description: () => {return "You are in the employee hallway, under the south end of the breezeway."},
+		commands: {
+			"go south": () => {player.location = world.west_sunrise_emp_hall; return player.location.description()},
+			"s": () => {return world.south_under_breezway.commands["go south"]()}
+		}
 	},
 
 	live_oak: {
@@ -1655,7 +1671,8 @@ const mobile_npc = {
 		inventory: {}
 	},
 	milton: {
-		move_on: 100,
+		dead: false,
+		move_on: 2,
 		location: world.breezeway_north,
 		inventory: {
 			"master key": {
@@ -1694,7 +1711,7 @@ const mobile_npc = {
 // player object (inventory, default and debug commands )
 const player = {
 	//START LOCATION
-	location: world.miltons_office,
+	location: world.north_sunrise_emp_hall,
 	dead: false,
 	inventory: {
 		"set of horse shoes": {
@@ -1707,7 +1724,11 @@ const player = {
 					return player.inventory["set of horse shoes"].commands["throw horse shoes"]();
 				}
 			}
-		}
+		},
+		/*"master key": {
+			description: "a plain white key card, hanging on a key ring.",
+			commands: {}
+		}*/
 	},
 	commands: {
 		inventory: () => {
