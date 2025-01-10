@@ -1576,7 +1576,13 @@ const world = {
 			"maint office": () => {return world.east_sunrise_emp_hall.commands["enter maintenance office"]()},
 			"go north": () => {return world.east_sunrise_emp_hall.commands["enter maintenance office"]()},
 			"n": () => {return world.east_sunrise_emp_hall.commands["enter maintenance office"]()},
-			"enter accounting office": () => {player.location = world.accounting_office; return player.location.description()},
+			"enter accounting office": () => {
+				if ("master key" in player.inventory) {
+					player.location = world.accounting_office; return player.location.description();
+				} else {
+					return "The door is locked, and you don't have a key.";
+				}
+			},
 			"go east": () => {return world.east_sunrise_emp_hall.commands["enter accounting office"]()},
 			"e": () => {return world.east_sunrise_emp_hall.commands["enter accounting office"]()},
 			"go west": () => {player.location = world.north_sunrise_emp_hall; return player.location.description()},
@@ -1604,10 +1610,24 @@ const world = {
 
 	maintenance_office: {
 		description: () => {return "You are in the maintenance office"},
+		commands: {
+			"go south": () => {player.location = world.east_sunrise_emp_hall; return player.location.description()},
+			"s": () => {return world.maintenance_office.commands["go south"]()},
+			"exit office": () => {return world.maintenance_office.commands["go south"]()},
+			"exit": () => {return world.maintenance_office.commands["go south"]()}
+
+		}
 	},
 	
 	accounting_office: {
 		description: () => {return "You are in the accounting office"},
+		commands: {
+			"go west": () => {player.location = world.east_sunrise_emp_hall; return player.location.description()},
+			"w": () => {return world.accounting_office.commands["go west"]()},
+			"exit office": () => {return world.accounting_office.commands["go west"]()},
+			"exit": () => {return world.accounting_office.commands["go west"]()}
+
+		}
 	},
 
 	south_under_breezway: {
