@@ -1661,6 +1661,21 @@ const world = {
 			}
 		}
 	*/},
+	oceanview_hall_north: {
+		//here
+		description: () => {return "You are in the northernmost section of the oceanview hallway. it continues south. there is an elevator landing to the east."},
+		commands: {
+			"go north": () => {player.location = world.; return player.location.description()},
+			"n": () => {return world.oceanview_hall_north.commands["go north"]()},
+			"go east": () => {player.location = world.; return player.location.description()},
+			"e": () => {return world.oceanview_hall_north.commands["go east"]()},
+			//"go west": () => {return world.west_sunrise_emp_hall.commands[]()},
+			//"w": () => {return world.west_sunrise_emp_hall.commands[]()},
+			"go south": () => {player.location = world.; return player.location.description()},
+			"s": () => {return world.oceanview_hall_north.commands["go south"]()},
+
+		}
+	},
 	/*
 	pool_gate_path: {},
 	hive_circle: {},
