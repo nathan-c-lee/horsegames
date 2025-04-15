@@ -1587,8 +1587,8 @@ const world = {
 			"e": () => {return world.east_sunrise_emp_hall.commands["enter accounting office"]()},
 			"go west": () => {player.location = world.north_sunrise_emp_hall; return player.location.description()},
 			"w": () => {return world.east_sunrise_emp_hall.commands["go west"]()},
-			//"go south": () => {return world.east_sunrise_emp_hall.commands[]()},
-			//"s": () => {return world.east_sunrise_emp_hall.commands[]()},
+			"go south": () => {player.location = world.oceanview_hall_north; return player.location.description()},
+			"s": () => {return world.east_sunrise_emp_hall.commands["go south"]()},
 
 		}
 	},
@@ -1665,17 +1665,46 @@ const world = {
 		//here
 		description: () => {return "You are in the northernmost section of the oceanview hallway. it continues south. there is an elevator landing to the east."},
 		commands: {
-			"go north": () => {player.location = world.; return player.location.description()},
+			"go north": () => {player.location = world.east_sunrise_emp_hall; return player.location.description()},
 			"n": () => {return world.oceanview_hall_north.commands["go north"]()},
-			"go east": () => {player.location = world.; return player.location.description()},
+			"go east": () => {player.location = world.elev_24_basement_landing; return player.location.description()},
 			"e": () => {return world.oceanview_hall_north.commands["go east"]()},
 			//"go west": () => {return world.west_sunrise_emp_hall.commands[]()},
 			//"w": () => {return world.west_sunrise_emp_hall.commands[]()},
-			"go south": () => {player.location = world.; return player.location.description()},
+			"go south": () => {player.location = world.oceanview_hall_south; return player.location.description()},
 			"s": () => {return world.oceanview_hall_north.commands["go south"]()},
 
 		}
 	},
+	oceanview_hall_south: {
+		description: () => {return "You are in the south section of the oceanview hallway. it continues north and south. the oceanview room lies to the east."},
+		commands: {
+			"go north": () => {player.location = world.oceanview_hall_north; return player.location.description()},
+			"n": () => {return world.oceanview_hall_south.commands["go north"]()},
+			"go east": () => {player.location = world.oceanview_room; return player.location.description()},
+			"e": () => {return world.oceanview_hall_south.commands["go east"]()},
+			//"go west": () => {return world.west_sunrise_emp_hall.commands[]()},
+			//"w": () => {return world.west_sunrise_emp_hall.commands[]()},
+			"go south": () => {player.location = world.gym_hall; return player.location.description()},
+			"s": () => {return world.oceanview_hall_south.commands["go south"]()},
+
+		}
+
+	},
+	elev_24_basement_landing: {
+		description: () => {return "You are in the basement level of the hotel, at the elevator landing outside the oceanview terrace. The elevator is accessable here, and to the west a doorway leads out onto the oceanview terrace hall."},
+		commands: {
+			"enter elevator": () => {player.location = elevators.elev_24; return player.location.description()},
+			"go west": () => {player.location = world.oceanview_hall_north; return player.location.description()},
+			"w": () => {return world.elev_24_basement_landing.commands["go west"]()},
+			"go south": () => {player.location = world.oceanview_room; return player.location.description()},
+			"s": () => {return world.elev_24_basement_landing.commands["go south"]()},
+		},
+	},
+	gym_hall: {
+		description: () => {return "poop"}
+	},
+	
 	/*
 	pool_gate_path: {},
 	hive_circle: {},
